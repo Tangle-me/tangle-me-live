@@ -1,0 +1,53 @@
+{
+  "name": "Tangle-me - Global Classifieds",
+  "short_name": "Tangle-me",
+  "description": "Free global classifieds platform in 8 languages. Text ads are always free!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "tangle-me-logo-original.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "tangle-me-logo-original.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "business", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Post Free",
+      "short_name": "Post",
+      "description": "Post a free ad",
+      "url": "/?action=post",
+      "icons": [
+        {
+          "src": "tangle-me-logo-original.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Find",
+      "short_name": "Find",
+      "description": "Search classifieds",
+      "url": "/?action=find",
+      "icons": [
+        {
+          "src": "tangle-me-logo-original.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

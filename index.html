@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#667eea">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tangle-me">
+    <link rel="apple-touch-icon" href="/tangle-me-logo-original.png">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="description" content="Free global classifieds platform in 8 languages. Text ads are always free!">
+    <meta name="keywords" content="classifieds, free ads, buy, sell, global marketplace">
+    
     <title>Tangle-me - Global Classifieds</title>
     <style>
         * {
@@ -28,7 +42,95 @@
             height: 100dvh;
         }
 
-        /* Header - OPTIMIZED SPACING */
+        /* Install Prompt Banner */
+        .install-banner {
+            position: fixed;
+            bottom: -100px;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: clamp(0.8rem, 2vh, 1.2rem);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            z-index: 10000;
+            transition: bottom 0.3s ease-in-out;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .install-banner.show {
+            bottom: 0;
+        }
+
+        .install-banner-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: clamp(0.6rem, 2vw, 1rem);
+        }
+
+        .install-banner-icon {
+            width: clamp(40px, 8vw, 50px);
+            height: clamp(40px, 8vw, 50px);
+            border-radius: clamp(8px, 2vh, 12px);
+            flex-shrink: 0;
+        }
+
+        .install-banner-text {
+            flex: 1;
+        }
+
+        .install-banner-title {
+            font-size: clamp(0.9rem, 2vh, 1.1rem);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .install-banner-desc {
+            font-size: clamp(0.75rem, 1.6vh, 0.85rem);
+            opacity: 0.9;
+        }
+
+        .install-banner-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .install-btn {
+            padding: clamp(0.5rem, 1.2vh, 0.7rem) clamp(0.8rem, 2.5vw, 1.2rem);
+            border: none;
+            border-radius: clamp(6px, 1.2vh, 8px);
+            font-weight: 600;
+            font-size: clamp(0.75rem, 1.6vh, 0.85rem);
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .install-btn-primary {
+            background: #4ade80;
+            color: #fff;
+        }
+
+        .install-btn-primary:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+        }
+
+        .install-btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .install-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -104,7 +206,6 @@
             color: #fff;
         }
 
-        /* Desktop Navigation */
         .desktop-nav {
             display: flex;
             gap: clamp(0.4rem, 1vw, 0.6rem);
@@ -156,7 +257,6 @@
             transform: translateY(-2px);
         }
 
-        /* Hamburger Menu Button - OPTIMIZED SIZE */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -196,7 +296,6 @@
             transform: rotate(-45deg) translateY(clamp(-5px, -1vh, -7px));
         }
 
-        /* Mobile Menu */
         .mobile-menu {
             position: fixed;
             top: clamp(48px, 6.5vh, 56px);
@@ -263,7 +362,6 @@
             background: #7c3aed;
         }
 
-        /* Overlay */
         .menu-overlay {
             display: none;
             position: fixed;
@@ -282,7 +380,6 @@
             opacity: 1;
         }
 
-        /* Main */
         .main {
             flex: 1;
             display: flex;
@@ -294,7 +391,6 @@
             gap: clamp(0.5rem, 1.5vh, 1rem);
         }
 
-        /* Brand Section */
         .brand-section {
             text-align: center;
             flex-shrink: 0;
@@ -308,7 +404,6 @@
             object-fit: contain;
         }
 
-        /* Features Container */
         .features {
             display: flex;
             flex-direction: column;
@@ -387,7 +482,6 @@
             line-height: 1.35;
         }
 
-        /* CTA */
         .cta {
             text-align: center;
             flex-shrink: 0;
@@ -412,7 +506,6 @@
             box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -478,7 +571,6 @@
             text-align: center;
         }
 
-        /* About Modal Content */
         .about-content {
             max-width: 800px;
             margin: 0 auto;
@@ -515,7 +607,6 @@
             margin: clamp(1rem, 2vh, 1.5rem) 0;
         }
 
-        /* Listings Grid */
         .listings-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
@@ -612,7 +703,6 @@
             transform: scale(1.1);
         }
 
-        /* Responsive Media Queries */
         @media (max-width: 768px) {
             .desktop-nav {
                 display: none;
@@ -637,7 +727,6 @@
             }
         }
 
-        /* Very small screens */
         @media (max-width: 360px) {
             .feature-desc {
                 display: none;
@@ -652,7 +741,6 @@
             }
         }
 
-        /* Very small height devices */
         @media (max-height: 600px) {
             .brand-logo {
                 max-height: 60px;
@@ -665,7 +753,6 @@
             }
         }
 
-        /* LANDSCAPE MODE - COMPLETE FIX */
         @media (orientation: landscape) and (max-height: 500px) {
             .header {
                 min-height: 42px;
@@ -731,7 +818,6 @@
             }
         }
 
-        /* Extra small landscape */
         @media (orientation: landscape) and (max-height: 400px) {
             .header {
                 min-height: 38px;
@@ -758,6 +844,21 @@
     </style>
 </head>
 <body>
+    <!-- Install Banner -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-banner-content">
+            <img src="tangle-me-logo-original.png" alt="Tangle-me" class="install-banner-icon">
+            <div class="install-banner-text">
+                <div class="install-banner-title" id="installTitle">Install Tangle-me</div>
+                <div class="install-banner-desc" id="installDesc">Access faster, works offline!</div>
+            </div>
+        </div>
+        <div class="install-banner-buttons">
+            <button class="install-btn install-btn-primary" id="installAccept">Install</button>
+            <button class="install-btn install-btn-secondary" id="installDismiss">Later</button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <div class="header-left">
@@ -777,14 +878,12 @@
                 <option value="fr">FR Français</option>
             </select>
             
-            <!-- Desktop Navigation -->
             <div class="desktop-nav">
                 <button class="btn btn-login" id="loginBtn">Log In</button>
                 <button class="btn btn-signup" id="signupBtn">Sign Up</button>
                 <button class="btn btn-about" id="aboutBtn" onclick="openAboutModal()">About</button>
             </div>
 
-            <!-- Hamburger Menu Button -->
             <div class="hamburger" id="hamburger" onclick="toggleMenu()">
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
@@ -793,25 +892,20 @@
         </div>
     </header>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <button class="mobile-menu-item login" id="mobileLoginBtn">Log In</button>
         <button class="mobile-menu-item signup" id="mobileSignupBtn">Sign Up</button>
         <button class="mobile-menu-item about" id="mobileAboutBtn" onclick="openAboutModal(); closeMenu();">About</button>
     </div>
 
-    <!-- Menu Overlay -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- Main Content -->
     <main class="main">
-        <!-- Brand Section -->
         <div class="brand-section">
             <img src="tangle-me-logo-original.png" alt="Tangle-me" class="brand-logo" onerror="this.style.display='none'">
         </div>
 
         <div class="features">
-            <!-- Post Free -->
             <button class="feature-btn">
                 <div class="feature-icon post-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -824,7 +918,6 @@
                 </div>
             </button>
 
-            <!-- Find -->
             <button class="feature-btn">
                 <div class="feature-icon find-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -838,7 +931,6 @@
                 </div>
             </button>
 
-            <!-- My Tangles -->
             <button class="feature-btn">
                 <div class="feature-icon tangles-icon">
                     <span style="font-size: clamp(18px, 3.2vh, 22px);">🔷</span>
@@ -850,7 +942,6 @@
             </button>
         </div>
 
-        <!-- CTA -->
         <div class="cta">
             <button class="btn-cta" id="signupFree">Sign Up Free</button>
         </div>
@@ -863,7 +954,6 @@
             <h2 class="modal-title" id="modalTitle">Sample Listings</h2>
             
             <div class="listings-grid">
-                <!-- Listing 1 -->
                 <div class="listing-card">
                     <div class="listing-header">
                         <h3 class="listing-title">Embraer E195-E2 Aircraft</h3>
@@ -881,7 +971,6 @@
                     </div>
                 </div>
 
-                <!-- Listing 2 -->
                 <div class="listing-card">
                     <div class="listing-header">
                         <h3 class="listing-title">Vintage BMW Motorcycle</h3>
@@ -899,7 +988,6 @@
                     </div>
                 </div>
 
-                <!-- Listing 3 -->
                 <div class="listing-card">
                     <div class="listing-header">
                         <h3 class="listing-title">Beachfront Villa</h3>
@@ -917,7 +1005,6 @@
                     </div>
                 </div>
 
-                <!-- Listing 4 -->
                 <div class="listing-card">
                     <div class="listing-header">
                         <h3 class="listing-title">Professional Camera Kit</h3>
@@ -935,7 +1022,6 @@
                     </div>
                 </div>
 
-                <!-- Listing 5 -->
                 <div class="listing-card">
                     <div class="listing-header">
                         <h3 class="listing-title">Antique Furniture Set</h3>
@@ -989,8 +1075,9 @@
         </div>
     </div>
 
+    <script src="/sw-register.js"></script>
     <script>
-        // Translations
+        // Translations (keeping existing translation object - truncated here for brevity)
         const translations = {
             en: {
                 testDemo: 'Tangle-me test',
@@ -1005,6 +1092,8 @@
                 myTanglesDesc: 'Save trusted contacts',
                 signupFree: 'Sign Up Free',
                 modalTitle: 'Sample Listings',
+                installTitle: 'Install Tangle-me',
+                installDesc: 'Access faster, works offline!',
                 aboutTitle: 'About Tangle-me',
                 aboutIntro: 'Welcome to Tangle-me, the global classifieds platform that connects people worldwide through the universal language of buying and selling.',
                 aboutMissionTitle: 'Our Mission',
@@ -1037,6 +1126,8 @@
                 myTanglesDesc: 'Salve contatos confiáveis',
                 signupFree: 'Cadastre-se Grátis',
                 modalTitle: 'Anúncios de Exemplo',
+                installTitle: 'Instalar Tangle-me',
+                installDesc: 'Acesso mais rápido, funciona offline!',
                 aboutTitle: 'Sobre Tangle-me',
                 aboutIntro: 'Bem-vindo ao Tangle-me, a plataforma global de classificados que conecta pessoas em todo o mundo através da linguagem universal de comprar e vender.',
                 aboutMissionTitle: 'Nossa Missão',
@@ -1069,6 +1160,8 @@
                 myTanglesDesc: 'Vertrauenswürdige Kontakte speichern',
                 signupFree: 'Kostenlos Registrieren',
                 modalTitle: 'Beispielanzeigen',
+                installTitle: 'Tangle-me Installieren',
+                installDesc: 'Schnellerer Zugriff, funktioniert offline!',
                 aboutTitle: 'Über Tangle-me',
                 aboutIntro: 'Willkommen bei Tangle-me, der globalen Kleinanzeigenplattform, die Menschen weltweit durch die universelle Sprache des Kaufens und Verkaufens verbindet.',
                 aboutMissionTitle: 'Unsere Mission',
@@ -1101,6 +1194,8 @@
                 myTanglesDesc: 'Gem betroede kontakter',
                 signupFree: 'Tilmeld Gratis',
                 modalTitle: 'Eksempel Annoncer',
+                installTitle: 'Installer Tangle-me',
+                installDesc: 'Hurtigere adgang, virker offline!',
                 aboutTitle: 'Om Tangle-me',
                 aboutIntro: 'Velkommen til Tangle-me, den globale annonce platform, der forbinder mennesker verden over gennem det universelle sprog for køb og salg.',
                 aboutMissionTitle: 'Vores Mission',
@@ -1133,6 +1228,8 @@
                 myTanglesDesc: '信頼できる連絡先を保存',
                 signupFree: '無料登録',
                 modalTitle: 'サンプル広告',
+                installTitle: 'Tangle-meをインストール',
+                installDesc: 'より速くアクセス、オフラインで動作！',
                 aboutTitle: 'Tangle-meについて',
                 aboutIntro: 'Tangle-meへようこそ。売買という普遍的な言語を通じて世界中の人々をつなぐグローバルクラシファイドプラットフォームです。',
                 aboutMissionTitle: '私たちの使命',
@@ -1165,6 +1262,8 @@
                 myTanglesDesc: '保存可信联系人',
                 signupFree: '免费注册',
                 modalTitle: '示例广告',
+                installTitle: '安装Tangle-me',
+                installDesc: '访问更快，离线工作！',
                 aboutTitle: '关于Tangle-me',
                 aboutIntro: '欢迎来到Tangle-me，这是一个通过买卖这一通用语言连接全球人民的全球分类广告平台。',
                 aboutMissionTitle: '我们的使命',
@@ -1197,6 +1296,8 @@
                 myTanglesDesc: 'Guardar contactos de confianza',
                 signupFree: 'Registrarse Gratis',
                 modalTitle: 'Anuncios de Ejemplo',
+                installTitle: 'Instalar Tangle-me',
+                installDesc: '¡Acceso más rápido, funciona sin conexión!',
                 aboutTitle: 'Acerca de Tangle-me',
                 aboutIntro: 'Bienvenido a Tangle-me, la plataforma global de clasificados que conecta a personas de todo el mundo a través del lenguaje universal de comprar y vender.',
                 aboutMissionTitle: 'Nuestra Misión',
@@ -1229,6 +1330,8 @@
                 myTanglesDesc: 'Sauvegarder les contacts de confiance',
                 signupFree: 'Inscription Gratuite',
                 modalTitle: 'Annonces Exemples',
+                installTitle: 'Installer Tangle-me',
+                installDesc: 'Accès plus rapide, fonctionne hors ligne!',
                 aboutTitle: 'À Propos de Tangle-me',
                 aboutIntro: 'Bienvenue sur Tangle-me, la plateforme mondiale de petites annonces qui connecte les gens du monde entier à travers le langage universel de l\'achat et de la vente.',
                 aboutMissionTitle: 'Notre Mission',
@@ -1250,12 +1353,10 @@
             }
         };
 
-        // Change language
         function changeLanguage() {
             const lang = document.getElementById('languageSelect').value;
             const t = translations[lang];
             
-            // Update all text elements
             document.getElementById('testDemo').textContent = t.testDemo;
             document.getElementById('loginBtn').textContent = t.login;
             document.getElementById('signupBtn').textContent = t.signup;
@@ -1271,6 +1372,8 @@
             document.getElementById('myTanglesDesc').textContent = t.myTanglesDesc;
             document.getElementById('signupFree').textContent = t.signupFree;
             document.getElementById('modalTitle').textContent = t.modalTitle;
+            document.getElementById('installTitle').textContent = t.installTitle;
+            document.getElementById('installDesc').textContent = t.installDesc;
             
             // About modal
             document.getElementById('aboutTitle').textContent = t.aboutTitle;
@@ -1293,7 +1396,6 @@
             document.getElementById('aboutJoin').innerHTML = '<strong>' + t.aboutJoin + '</strong>';
         }
 
-        // Mobile menu functions
         function toggleMenu() {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -1314,7 +1416,6 @@
             overlay.classList.remove('show');
         }
 
-        // Modal functions
         function openListingsModal() {
             document.getElementById('listingsModal').classList.add('show');
             closeMenu();
@@ -1335,10 +1436,8 @@
             }
         }
 
-        // Initialize with English
         changeLanguage();
 
-        // Close mobile menu when clicking outside
         document.addEventListener('click', function(event) {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
