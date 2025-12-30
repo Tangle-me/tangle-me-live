@@ -28,17 +28,17 @@
             height: 100dvh;
         }
 
-        /* Header */
+        /* Header - FIXED ALIGNMENT */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: clamp(0.4rem, 1.2vh, 0.6rem) clamp(0.8rem, 2.5vw, 1.5rem);
+            padding: clamp(0.5rem, 1.2vh, 0.7rem) clamp(0.8rem, 2.5vw, 1.5rem);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             flex-shrink: 0;
-            height: clamp(45px, 7vh, 55px);
+            min-height: clamp(50px, 7vh, 60px);
             position: relative;
             z-index: 100;
         }
@@ -46,7 +46,6 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: clamp(0.5rem, 1.5vw, 1rem);
         }
 
         .test-btn {
@@ -54,7 +53,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: clamp(6px, 1.2vh, 8px);
             cursor: pointer;
-            padding: clamp(0.35rem, 1vh, 0.5rem) clamp(0.6rem, 1.8vw, 1rem);
+            padding: clamp(0.4rem, 1vh, 0.55rem) clamp(0.7rem, 1.8vw, 1rem);
             display: flex;
             align-items: center;
             gap: clamp(0.3rem, 1vw, 0.5rem);
@@ -64,6 +63,7 @@
             font-size: clamp(0.75rem, 1.9vh, 0.95rem);
             transition: all 0.3s;
             white-space: nowrap;
+            height: clamp(38px, 5vh, 42px);
         }
 
         .test-btn:hover {
@@ -74,11 +74,11 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: clamp(0.4rem, 1.2vw, 0.6rem);
+            gap: clamp(0.5rem, 1.2vw, 0.7rem);
         }
 
         .language-select {
-            padding: clamp(0.35rem, 1vh, 0.5rem) clamp(0.6rem, 1.8vw, 1rem);
+            padding: clamp(0.4rem, 1vh, 0.55rem) clamp(0.7rem, 1.8vw, 1rem);
             border-radius: clamp(6px, 1.2vh, 8px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             background: rgba(255, 255, 255, 0.1);
@@ -88,6 +88,7 @@
             cursor: pointer;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
+            height: clamp(38px, 5vh, 42px);
         }
 
         .language-select:hover {
@@ -102,11 +103,12 @@
         /* Desktop Navigation */
         .desktop-nav {
             display: flex;
-            gap: clamp(0.4rem, 1.2vw, 0.6rem);
+            gap: clamp(0.5rem, 1.2vw, 0.7rem);
+            align-items: center;
         }
 
         .btn {
-            padding: clamp(0.35rem, 1vh, 0.5rem) clamp(0.7rem, 2.2vw, 1.2rem);
+            padding: clamp(0.4rem, 1vh, 0.55rem) clamp(0.8rem, 2.2vw, 1.2rem);
             border: none;
             border-radius: clamp(6px, 1.2vh, 8px);
             font-weight: 600;
@@ -114,6 +116,10 @@
             font-size: clamp(0.75rem, 1.7vh, 0.9rem);
             transition: all 0.3s;
             white-space: nowrap;
+            height: clamp(38px, 5vh, 42px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-login {
@@ -136,27 +142,30 @@
             transform: translateY(-2px);
         }
 
+        /* FIXED: About button color - changed to purple/violet */
         .btn-about {
-            background: #3b82f6;
+            background: #8b5cf6;
             color: #fff;
         }
 
         .btn-about:hover {
-            background: #2563eb;
+            background: #7c3aed;
             transform: translateY(-2px);
         }
 
-        /* Hamburger Menu Button */
+        /* Hamburger Menu Button - FIXED ALIGNMENT */
         .hamburger {
             display: none;
             flex-direction: column;
             gap: clamp(4px, 0.8vh, 5px);
             cursor: pointer;
-            padding: clamp(6px, 1.2vh, 8px);
+            padding: clamp(8px, 1.2vh, 10px);
             background: rgba(255, 255, 255, 0.15);
             border-radius: clamp(6px, 1.2vh, 8px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s;
+            height: clamp(38px, 5vh, 42px);
+            justify-content: center;
         }
 
         .hamburger:hover {
@@ -186,11 +195,11 @@
         /* Mobile Menu */
         .mobile-menu {
             position: fixed;
-            top: clamp(45px, 7vh, 55px);
+            top: clamp(50px, 7vh, 60px);
             right: -100%;
             width: min(280px, 80vw);
-            height: calc(100vh - clamp(45px, 7vh, 55px));
-            height: calc(100dvh - clamp(45px, 7vh, 55px));
+            height: calc(100vh - clamp(50px, 7vh, 60px));
+            height: calc(100dvh - clamp(50px, 7vh, 60px));
             background: rgba(102, 126, 234, 0.98);
             backdrop-filter: blur(20px);
             box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
@@ -228,8 +237,9 @@
             color: #fff;
         }
 
+        /* FIXED: About button color in mobile menu */
         .mobile-menu-item.about {
-            background: #3b82f6;
+            background: #8b5cf6;
             color: #fff;
         }
 
@@ -238,11 +248,23 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .mobile-menu-item.login:hover {
+            background: #22c55e;
+        }
+
+        .mobile-menu-item.signup:hover {
+            background: #ff5722;
+        }
+
+        .mobile-menu-item.about:hover {
+            background: #7c3aed;
+        }
+
         /* Overlay */
         .menu-overlay {
             display: none;
             position: fixed;
-            top: clamp(45px, 7vh, 55px);
+            top: clamp(50px, 7vh, 60px);
             left: 0;
             right: 0;
             bottom: 0;
@@ -387,7 +409,7 @@
             box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
         }
 
-        /* Modal */
+        /* Modal - FIXED POSITIONING for X button visibility */
         .modal {
             display: none;
             position: fixed;
@@ -410,37 +432,40 @@
         .modal-content {
             background: #fff;
             border-radius: clamp(12px, 2.5vh, 20px);
-            padding: clamp(1rem, 3vh, 2rem);
+            padding: clamp(3rem, 5vh, 4rem) clamp(1rem, 3vw, 2rem) clamp(1rem, 3vh, 2rem);
             max-width: min(1200px, 95vw);
             width: 100%;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
             color: #333;
+            margin-top: clamp(40px, 8vh, 60px);
         }
 
         .modal-close {
             position: absolute;
-            top: clamp(0.5rem, 1.5vh, 1rem);
-            right: clamp(0.5rem, 1.5vh, 1rem);
+            top: clamp(0.8rem, 2vh, 1.2rem);
+            right: clamp(0.8rem, 2vw, 1.2rem);
             background: #f44336;
             color: #fff;
             border: none;
-            width: clamp(32px, 5vh, 40px);
-            height: clamp(32px, 5vh, 40px);
+            width: clamp(36px, 6vh, 44px);
+            height: clamp(36px, 6vh, 44px);
             border-radius: 50%;
-            font-size: clamp(1.2rem, 3vh, 1.5rem);
+            font-size: clamp(1.3rem, 3.5vh, 1.6rem);
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             line-height: 1;
+            font-weight: bold;
+            z-index: 10;
         }
 
         .modal-close:hover {
             background: #d32f2f;
-            transform: rotate(90deg);
+            transform: rotate(90deg) scale(1.1);
         }
 
         .modal-title {
@@ -450,6 +475,44 @@
             text-align: center;
         }
 
+        /* About Modal Content */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .about-content h3 {
+            color: #667eea;
+            font-size: clamp(1.1rem, 2.5vh, 1.4rem);
+            margin: clamp(1rem, 2vh, 1.5rem) 0 clamp(0.5rem, 1vh, 0.75rem) 0;
+        }
+
+        .about-content p {
+            color: #555;
+            font-size: clamp(0.9rem, 1.8vh, 1rem);
+            margin-bottom: clamp(0.75rem, 1.5vh, 1rem);
+        }
+
+        .about-content ul {
+            color: #555;
+            font-size: clamp(0.9rem, 1.8vh, 1rem);
+            margin: clamp(0.5rem, 1vh, 0.75rem) 0 clamp(1rem, 2vh, 1.5rem) clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .about-content li {
+            margin-bottom: clamp(0.4rem, 0.8vh, 0.6rem);
+        }
+
+        .about-highlight {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: clamp(1rem, 2vh, 1.5rem);
+            border-radius: clamp(8px, 1.5vh, 12px);
+            border-left: 4px solid #667eea;
+            margin: clamp(1rem, 2vh, 1.5rem) 0;
+        }
+
+        /* Listings Grid */
         .listings-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
@@ -594,8 +657,8 @@
         /* Landscape mode */
         @media (orientation: landscape) and (max-height: 500px) {
             .header {
-                height: 40px;
-                padding: 0.3rem 1rem;
+                min-height: 45px;
+                padding: 0.4rem 1rem;
             }
             .brand-section {
                 display: none;
@@ -618,7 +681,7 @@
     <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <button class="test-btn" onclick="openModal()" id="testBtn">
+            <button class="test-btn" onclick="openListingsModal()" id="testBtn">
                 🔷 <span id="testDemo">Tangle-me test</span>
             </button>
         </div>
@@ -638,7 +701,7 @@
             <div class="desktop-nav">
                 <button class="btn btn-login" id="loginBtn">Log In</button>
                 <button class="btn btn-signup" id="signupBtn">Sign Up</button>
-                <button class="btn btn-about" id="aboutBtn">About</button>
+                <button class="btn btn-about" id="aboutBtn" onclick="openAboutModal()">About</button>
             </div>
 
             <!-- Hamburger Menu Button -->
@@ -654,7 +717,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <button class="mobile-menu-item login" id="mobileLoginBtn">Log In</button>
         <button class="mobile-menu-item signup" id="mobileSignupBtn">Sign Up</button>
-        <button class="mobile-menu-item about" id="mobileAboutBtn">About</button>
+        <button class="mobile-menu-item about" id="mobileAboutBtn" onclick="openAboutModal(); closeMenu();">About</button>
     </div>
 
     <!-- Menu Overlay -->
@@ -713,10 +776,10 @@
         </div>
     </main>
 
-    <!-- Modal -->
-    <div class="modal" id="modal" onclick="closeModalOnOverlay(event)">
+    <!-- Listings Modal -->
+    <div class="modal" id="listingsModal" onclick="closeModalOnOverlay(event, 'listingsModal')">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <button class="modal-close" onclick="closeModal('listingsModal')">×</button>
             <h2 class="modal-title" id="modalTitle">Sample Listings</h2>
             
             <div class="listings-grid">
@@ -813,6 +876,39 @@
         </div>
     </div>
 
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal" onclick="closeModalOnOverlay(event, 'aboutModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
+            <h2 class="modal-title" id="aboutTitle">About Tangle-me</h2>
+            
+            <div class="about-content">
+                <p id="aboutIntro">Welcome to Tangle-me, the global classifieds platform that connects people worldwide through the universal language of buying and selling.</p>
+                
+                <h3 id="aboutMissionTitle">Our Mission</h3>
+                <p id="aboutMission">We believe that advertising your products and services should be accessible to everyone, everywhere. That's why text ads on Tangle-me are free forever.</p>
+                
+                <div class="about-highlight">
+                    <h3 id="aboutWhyTitle">Why Choose Tangle-me?</h3>
+                    <ul id="aboutWhyList">
+                        <li><strong id="aboutFree">Free Forever:</strong> <span id="aboutFreeDesc">Text advertisements never cost a penny</span></li>
+                        <li><strong id="aboutGlobal">Global Reach:</strong> <span id="aboutGlobalDesc">Available in 8 languages across the world</span></li>
+                        <li><strong id="aboutSimple">Simple & Fast:</strong> <span id="aboutSimpleDesc">Post your ad in seconds, no complicated forms</span></li>
+                        <li><strong id="aboutTrust">Built on Trust:</strong> <span id="aboutTrustDesc">Connect with verified Tangles (trusted contacts)</span></li>
+                    </ul>
+                </div>
+                
+                <h3 id="aboutLanguagesTitle">Supported Languages</h3>
+                <p id="aboutLanguages">English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français</p>
+                
+                <h3 id="aboutPremiumTitle">Premium Features</h3>
+                <p id="aboutPremium">Want to stand out? Upgrade to add photos ($2.99/month) or unlock business features ($9.99/month) for advanced tools and analytics.</p>
+                
+                <p id="aboutJoin"><strong>Join thousands of users worldwide who trust Tangle-me for their buying and selling needs.</strong></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Translations
         const translations = {
@@ -828,7 +924,25 @@
                 myTangles: 'My Tangles',
                 myTanglesDesc: 'Save trusted contacts',
                 signupFree: 'Sign Up Free',
-                dummyListings: 'Sample Listings'
+                modalTitle: 'Sample Listings',
+                aboutTitle: 'About Tangle-me',
+                aboutIntro: 'Welcome to Tangle-me, the global classifieds platform that connects people worldwide through the universal language of buying and selling.',
+                aboutMissionTitle: 'Our Mission',
+                aboutMission: 'We believe that advertising your products and services should be accessible to everyone, everywhere. That\'s why text ads on Tangle-me are free forever.',
+                aboutWhyTitle: 'Why Choose Tangle-me?',
+                aboutFree: 'Free Forever:',
+                aboutFreeDesc: 'Text advertisements never cost a penny',
+                aboutGlobal: 'Global Reach:',
+                aboutGlobalDesc: 'Available in 8 languages across the world',
+                aboutSimple: 'Simple & Fast:',
+                aboutSimpleDesc: 'Post your ad in seconds, no complicated forms',
+                aboutTrust: 'Built on Trust:',
+                aboutTrustDesc: 'Connect with verified Tangles (trusted contacts)',
+                aboutLanguagesTitle: 'Supported Languages',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'Premium Features',
+                aboutPremium: 'Want to stand out? Upgrade to add photos ($2.99/month) or unlock business features ($9.99/month) for advanced tools and analytics.',
+                aboutJoin: 'Join thousands of users worldwide who trust Tangle-me for their buying and selling needs.'
             },
             pt: {
                 testDemo: 'Teste Tangle-me',
@@ -842,7 +956,25 @@
                 myTangles: 'Meus Tangles',
                 myTanglesDesc: 'Salve contatos confiáveis',
                 signupFree: 'Cadastre-se Grátis',
-                dummyListings: 'Anúncios de Exemplo'
+                modalTitle: 'Anúncios de Exemplo',
+                aboutTitle: 'Sobre Tangle-me',
+                aboutIntro: 'Bem-vindo ao Tangle-me, a plataforma global de classificados que conecta pessoas em todo o mundo através da linguagem universal de comprar e vender.',
+                aboutMissionTitle: 'Nossa Missão',
+                aboutMission: 'Acreditamos que anunciar seus produtos e serviços deve ser acessível a todos, em qualquer lugar. Por isso, anúncios de texto no Tangle-me são gratuitos para sempre.',
+                aboutWhyTitle: 'Por Que Escolher Tangle-me?',
+                aboutFree: 'Grátis Para Sempre:',
+                aboutFreeDesc: 'Anúncios de texto nunca custam nada',
+                aboutGlobal: 'Alcance Global:',
+                aboutGlobalDesc: 'Disponível em 8 idiomas em todo o mundo',
+                aboutSimple: 'Simples e Rápido:',
+                aboutSimpleDesc: 'Publique seu anúncio em segundos, sem formulários complicados',
+                aboutTrust: 'Baseado em Confiança:',
+                aboutTrustDesc: 'Conecte-se com Tangles verificados (contatos confiáveis)',
+                aboutLanguagesTitle: 'Idiomas Suportados',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'Recursos Premium',
+                aboutPremium: 'Quer se destacar? Atualize para adicionar fotos ($2,99/mês) ou desbloqueie recursos empresariais ($9,99/mês) para ferramentas e análises avançadas.',
+                aboutJoin: 'Junte-se a milhares de usuários em todo o mundo que confiam no Tangle-me para suas necessidades de compra e venda.'
             },
             de: {
                 testDemo: 'Tangle-me Test',
@@ -856,7 +988,25 @@
                 myTangles: 'Meine Tangles',
                 myTanglesDesc: 'Vertrauenswürdige Kontakte speichern',
                 signupFree: 'Kostenlos Registrieren',
-                dummyListings: 'Beispielanzeigen'
+                modalTitle: 'Beispielanzeigen',
+                aboutTitle: 'Über Tangle-me',
+                aboutIntro: 'Willkommen bei Tangle-me, der globalen Kleinanzeigenplattform, die Menschen weltweit durch die universelle Sprache des Kaufens und Verkaufens verbindet.',
+                aboutMissionTitle: 'Unsere Mission',
+                aboutMission: 'Wir glauben, dass Werbung für Ihre Produkte und Dienstleistungen für jeden überall zugänglich sein sollte. Deshalb sind Textanzeigen auf Tangle-me für immer kostenlos.',
+                aboutWhyTitle: 'Warum Tangle-me?',
+                aboutFree: 'Für Immer Kostenlos:',
+                aboutFreeDesc: 'Textanzeigen kosten nie einen Cent',
+                aboutGlobal: 'Globale Reichweite:',
+                aboutGlobalDesc: 'Verfügbar in 8 Sprachen weltweit',
+                aboutSimple: 'Einfach & Schnell:',
+                aboutSimpleDesc: 'Veröffentlichen Sie Ihre Anzeige in Sekunden, keine komplizierten Formulare',
+                aboutTrust: 'Auf Vertrauen Aufgebaut:',
+                aboutTrustDesc: 'Verbinden Sie sich mit verifizierten Tangles (vertrauenswürdige Kontakte)',
+                aboutLanguagesTitle: 'Unterstützte Sprachen',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'Premium-Funktionen',
+                aboutPremium: 'Möchten Sie sich abheben? Upgraden Sie, um Fotos hinzuzufügen ($2,99/Monat) oder schalten Sie Business-Funktionen frei ($9,99/Monat) für erweiterte Tools und Analysen.',
+                aboutJoin: 'Schließen Sie sich Tausenden von Benutzern weltweit an, die Tangle-me für ihre Kauf- und Verkaufsbedürfnisse vertrauen.'
             },
             da: {
                 testDemo: 'Tangle-me test',
@@ -870,7 +1020,25 @@
                 myTangles: 'Mine Tangles',
                 myTanglesDesc: 'Gem betroede kontakter',
                 signupFree: 'Tilmeld Gratis',
-                dummyListings: 'Eksempel Annoncer'
+                modalTitle: 'Eksempel Annoncer',
+                aboutTitle: 'Om Tangle-me',
+                aboutIntro: 'Velkommen til Tangle-me, den globale annonce platform, der forbinder mennesker verden over gennem det universelle sprog for køb og salg.',
+                aboutMissionTitle: 'Vores Mission',
+                aboutMission: 'Vi tror, at annoncering af dine produkter og tjenester skal være tilgængelig for alle, overalt. Derfor er tekstannoncer på Tangle-me gratis for altid.',
+                aboutWhyTitle: 'Hvorfor Vælge Tangle-me?',
+                aboutFree: 'Gratis For Evigt:',
+                aboutFreeDesc: 'Tekstannoncer koster aldrig en krone',
+                aboutGlobal: 'Global Rækkevidde:',
+                aboutGlobalDesc: 'Tilgængelig på 8 sprog verden over',
+                aboutSimple: 'Simpelt & Hurtigt:',
+                aboutSimpleDesc: 'Opslå din annonce på sekunder, ingen komplicerede formularer',
+                aboutTrust: 'Bygget på Tillid:',
+                aboutTrustDesc: 'Forbind med verificerede Tangles (betroede kontakter)',
+                aboutLanguagesTitle: 'Understøttede Sprog',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'Premium Funktioner',
+                aboutPremium: 'Vil du skille dig ud? Opgrader for at tilføje billeder ($2,99/måned) eller lås op for erhvervsfunktioner ($9,99/måned) til avancerede værktøjer og analyser.',
+                aboutJoin: 'Slut dig til tusindvis af brugere verden over, der stoler på Tangle-me til deres købs- og salgsbehov.'
             },
             ja: {
                 testDemo: 'Tangle-meテスト',
@@ -884,7 +1052,25 @@
                 myTangles: 'マイタングル',
                 myTanglesDesc: '信頼できる連絡先を保存',
                 signupFree: '無料登録',
-                dummyListings: 'サンプル広告'
+                modalTitle: 'サンプル広告',
+                aboutTitle: 'Tangle-meについて',
+                aboutIntro: 'Tangle-meへようこそ。売買という普遍的な言語を通じて世界中の人々をつなぐグローバルクラシファイドプラットフォームです。',
+                aboutMissionTitle: '私たちの使命',
+                aboutMission: '製品やサービスの広告は、誰でもどこでもアクセスできるべきだと考えています。だからこそ、Tangle-meのテキスト広告は永遠に無料です。',
+                aboutWhyTitle: 'なぜTangle-meを選ぶのか？',
+                aboutFree: '永久無料：',
+                aboutFreeDesc: 'テキスト広告は一切費用がかかりません',
+                aboutGlobal: 'グローバルリーチ：',
+                aboutGlobalDesc: '世界中で8言語に対応',
+                aboutSimple: 'シンプル＆高速：',
+                aboutSimpleDesc: '複雑なフォームなしで数秒で広告を投稿',
+                aboutTrust: '信頼に基づく：',
+                aboutTrustDesc: '検証済みTangles（信頼できる連絡先）と接続',
+                aboutLanguagesTitle: 'サポート言語',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'プレミアム機能',
+                aboutPremium: '目立ちたいですか？写真を追加（月額$2.99）またはビジネス機能を解除（月額$9.99）して、高度なツールと分析にアクセスできます。',
+                aboutJoin: 'Tangle-meを売買ニーズに信頼する世界中の何千人ものユーザーに参加してください。'
             },
             zh: {
                 testDemo: 'Tangle-me测试',
@@ -898,7 +1084,25 @@
                 myTangles: '我的Tangles',
                 myTanglesDesc: '保存可信联系人',
                 signupFree: '免费注册',
-                dummyListings: '示例广告'
+                modalTitle: '示例广告',
+                aboutTitle: '关于Tangle-me',
+                aboutIntro: '欢迎来到Tangle-me，这是一个通过买卖这一通用语言连接全球人民的全球分类广告平台。',
+                aboutMissionTitle: '我们的使命',
+                aboutMission: '我们相信，宣传您的产品和服务应该让每个人在任何地方都能访问。这就是为什么Tangle-me上的文字广告永远免费。',
+                aboutWhyTitle: '为什么选择Tangle-me？',
+                aboutFree: '永久免费：',
+                aboutFreeDesc: '文字广告永远不花一分钱',
+                aboutGlobal: '全球覆盖：',
+                aboutGlobalDesc: '全球8种语言可用',
+                aboutSimple: '简单快速：',
+                aboutSimpleDesc: '几秒钟内发布您的广告，没有复杂的表格',
+                aboutTrust: '基于信任：',
+                aboutTrustDesc: '与经过验证的Tangles（可信联系人）连接',
+                aboutLanguagesTitle: '支持的语言',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: '高级功能',
+                aboutPremium: '想要脱颖而出？升级以添加照片（每月$2.99）或解锁商业功能（每月$9.99）以获得高级工具和分析。',
+                aboutJoin: '加入全球数千名信任Tangle-me满足其买卖需求的用户。'
             },
             es: {
                 testDemo: 'Prueba Tangle-me',
@@ -912,7 +1116,25 @@
                 myTangles: 'Mis Tangles',
                 myTanglesDesc: 'Guardar contactos de confianza',
                 signupFree: 'Registrarse Gratis',
-                dummyListings: 'Anuncios de Ejemplo'
+                modalTitle: 'Anuncios de Ejemplo',
+                aboutTitle: 'Acerca de Tangle-me',
+                aboutIntro: 'Bienvenido a Tangle-me, la plataforma global de clasificados que conecta a personas de todo el mundo a través del lenguaje universal de comprar y vender.',
+                aboutMissionTitle: 'Nuestra Misión',
+                aboutMission: 'Creemos que anunciar sus productos y servicios debe ser accesible para todos, en todas partes. Por eso los anuncios de texto en Tangle-me son gratuitos para siempre.',
+                aboutWhyTitle: '¿Por Qué Elegir Tangle-me?',
+                aboutFree: 'Gratis Para Siempre:',
+                aboutFreeDesc: 'Los anuncios de texto nunca cuestan un centavo',
+                aboutGlobal: 'Alcance Global:',
+                aboutGlobalDesc: 'Disponible en 8 idiomas en todo el mundo',
+                aboutSimple: 'Simple y Rápido:',
+                aboutSimpleDesc: 'Publica tu anuncio en segundos, sin formularios complicados',
+                aboutTrust: 'Construido sobre Confianza:',
+                aboutTrustDesc: 'Conéctate con Tangles verificados (contactos de confianza)',
+                aboutLanguagesTitle: 'Idiomas Soportados',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'Funciones Premium',
+                aboutPremium: '¿Quieres destacar? Actualiza para agregar fotos ($2.99/mes) o desbloquea funciones empresariales ($9.99/mes) para herramientas y análisis avanzados.',
+                aboutJoin: 'Únete a miles de usuarios en todo el mundo que confían en Tangle-me para sus necesidades de compra y venta.'
             },
             fr: {
                 testDemo: 'Test Tangle-me',
@@ -926,7 +1148,25 @@
                 myTangles: 'Mes Tangles',
                 myTanglesDesc: 'Sauvegarder les contacts de confiance',
                 signupFree: 'Inscription Gratuite',
-                dummyListings: 'Annonces Exemples'
+                modalTitle: 'Annonces Exemples',
+                aboutTitle: 'À Propos de Tangle-me',
+                aboutIntro: 'Bienvenue sur Tangle-me, la plateforme mondiale de petites annonces qui connecte les gens du monde entier à travers le langage universel de l\'achat et de la vente.',
+                aboutMissionTitle: 'Notre Mission',
+                aboutMission: 'Nous croyons que la publicité de vos produits et services doit être accessible à tous, partout. C\'est pourquoi les annonces texte sur Tangle-me sont gratuites pour toujours.',
+                aboutWhyTitle: 'Pourquoi Choisir Tangle-me?',
+                aboutFree: 'Gratuit Pour Toujours:',
+                aboutFreeDesc: 'Les annonces texte ne coûtent jamais un centime',
+                aboutGlobal: 'Portée Mondiale:',
+                aboutGlobalDesc: 'Disponible en 8 langues dans le monde',
+                aboutSimple: 'Simple et Rapide:',
+                aboutSimpleDesc: 'Publiez votre annonce en quelques secondes, sans formulaires compliqués',
+                aboutTrust: 'Basé sur la Confiance:',
+                aboutTrustDesc: 'Connectez-vous avec des Tangles vérifiés (contacts de confiance)',
+                aboutLanguagesTitle: 'Langues Prises en Charge',
+                aboutLanguages: 'English, Português, Deutsch, Dansk, 日本語, 中文, Español, Français',
+                aboutPremiumTitle: 'Fonctionnalités Premium',
+                aboutPremium: 'Vous voulez vous démarquer? Passez à la version supérieure pour ajouter des photos ($2.99/mois) ou débloquez les fonctionnalités professionnelles ($9.99/mois) pour des outils et analyses avancés.',
+                aboutJoin: 'Rejoignez des milliers d\'utilisateurs dans le monde qui font confiance à Tangle-me pour leurs besoins d\'achat et de vente.'
             }
         };
 
@@ -950,7 +1190,27 @@
             document.getElementById('myTangles').textContent = t.myTangles;
             document.getElementById('myTanglesDesc').textContent = t.myTanglesDesc;
             document.getElementById('signupFree').textContent = t.signupFree;
-            document.getElementById('modalTitle').textContent = t.dummyListings;
+            document.getElementById('modalTitle').textContent = t.modalTitle;
+            
+            // About modal
+            document.getElementById('aboutTitle').textContent = t.aboutTitle;
+            document.getElementById('aboutIntro').textContent = t.aboutIntro;
+            document.getElementById('aboutMissionTitle').textContent = t.aboutMissionTitle;
+            document.getElementById('aboutMission').textContent = t.aboutMission;
+            document.getElementById('aboutWhyTitle').textContent = t.aboutWhyTitle;
+            document.getElementById('aboutFree').textContent = t.aboutFree;
+            document.getElementById('aboutFreeDesc').textContent = t.aboutFreeDesc;
+            document.getElementById('aboutGlobal').textContent = t.aboutGlobal;
+            document.getElementById('aboutGlobalDesc').textContent = t.aboutGlobalDesc;
+            document.getElementById('aboutSimple').textContent = t.aboutSimple;
+            document.getElementById('aboutSimpleDesc').textContent = t.aboutSimpleDesc;
+            document.getElementById('aboutTrust').textContent = t.aboutTrust;
+            document.getElementById('aboutTrustDesc').textContent = t.aboutTrustDesc;
+            document.getElementById('aboutLanguagesTitle').textContent = t.aboutLanguagesTitle;
+            document.getElementById('aboutLanguages').textContent = t.aboutLanguages;
+            document.getElementById('aboutPremiumTitle').textContent = t.aboutPremiumTitle;
+            document.getElementById('aboutPremium').textContent = t.aboutPremium;
+            document.getElementById('aboutJoin').innerHTML = '<strong>' + t.aboutJoin + '</strong>';
         }
 
         // Mobile menu functions
@@ -975,18 +1235,23 @@
         }
 
         // Modal functions
-        function openModal() {
-            document.getElementById('modal').classList.add('show');
-            closeMenu(); // Close mobile menu if open
+        function openListingsModal() {
+            document.getElementById('listingsModal').classList.add('show');
+            closeMenu();
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.remove('show');
+        function openAboutModal() {
+            document.getElementById('aboutModal').classList.add('show');
+            closeMenu();
         }
 
-        function closeModalOnOverlay(event) {
-            if (event.target.id === 'modal') {
-                closeModal();
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function closeModalOnOverlay(event, modalId) {
+            if (event.target.id === modalId) {
+                closeModal(modalId);
             }
         }
 
