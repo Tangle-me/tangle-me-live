@@ -14,6 +14,9 @@
     <meta name="apple-mobile-web-app-title" content="Tangle-me">
     <link rel="apple-touch-icon" href="/tangle-me-logo-original.png">
     
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <title>Tangle-me - Global Classifieds</title>
     <style>
         * {
@@ -35,15 +38,17 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh;
         }
 
+        /* Install Banner */
         .install-banner {
             position: fixed;
             bottom: -100px;
             left: 0;
             right: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 1rem;
+            padding: clamp(0.8rem, 2vh, 1.2rem);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
@@ -100,6 +105,7 @@
             color: #fff;
         }
 
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -124,6 +130,16 @@
             transition: all 0.3s;
         }
 
+        .test-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .language-select {
             padding: 0.4rem 0.6rem;
             border-radius: 8px;
@@ -132,6 +148,11 @@
             color: #fff;
             font-weight: 600;
             cursor: pointer;
+        }
+
+        .language-select option {
+            background: #667eea;
+            color: #fff;
         }
 
         .desktop-nav {
@@ -181,6 +202,80 @@
             transition: all 0.3s;
         }
 
+        .hamburger.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translateY(6px);
+        }
+
+        .hamburger.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translateY(-6px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 50px;
+            right: -100%;
+            width: min(280px, 80vw);
+            height: calc(100vh - 50px);
+            background: rgba(102, 126, 234, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 99;
+            transition: right 0.3s;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: 1rem;
+        }
+
+        .mobile-menu.open {
+            right: 0;
+        }
+
+        .mobile-menu-item {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu-item.login {
+            background: #4ade80;
+            color: #fff;
+        }
+
+        .mobile-menu-item.signup {
+            background: #ff6b35;
+            color: #fff;
+        }
+
+        .mobile-menu-item.about {
+            background: #8b5cf6;
+            color: #fff;
+        }
+
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 50px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 98;
+        }
+
+        .menu-overlay.show {
+            display: block;
+        }
+
         .main {
             flex: 1;
             display: flex;
@@ -189,6 +284,7 @@
             justify-content: center;
             padding: 1rem;
             gap: 1rem;
+            overflow-y: auto;
         }
 
         .brand-logo {
@@ -277,6 +373,11 @@
             transition: all 0.3s;
         }
 
+        .btn-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -302,7 +403,7 @@
             padding: 3rem 1.5rem 1.5rem;
             max-width: 600px;
             width: 100%;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
             position: relative;
             color: #333;
@@ -326,6 +427,11 @@
             transition: all 0.3s;
         }
 
+        .modal-close:hover {
+            background: #d32f2f;
+            transform: rotate(90deg);
+        }
+
         .modal-title {
             margin: 0 0 1.5rem 0;
             color: #333;
@@ -333,6 +439,7 @@
             text-align: center;
         }
 
+        /* Post Form Styles */
         .post-form {
             display: flex;
             flex-direction: column;
@@ -385,27 +492,16 @@
             color: #ff6b35;
         }
 
-        .price-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .price-input {
-            flex: 1;
-        }
-
-        .currency-select {
-            padding: 0.7rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            background: white;
-            cursor: pointer;
-            min-width: 90px;
+        /* Location Section Styles */
+        .location-section {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #667eea;
         }
 
         .location-info {
-            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            background: rgba(255, 255, 255, 0.7);
             padding: 1rem;
             border-radius: 8px;
             border-left: 4px solid #667eea;
@@ -419,35 +515,117 @@
             font-size: 1rem;
         }
 
-        .photo-upgrade {
-            background: #f8f9fa;
-            border: 2px dashed #e0e0e0;
+        .location-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-btn {
+            padding: 1rem;
+            border: 2px solid #667eea;
             border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
+            background: white;
             cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .location-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .location-btn span:first-child {
+            font-size: 1.5rem;
+        }
+
+        .selected-location {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid #4ade80;
+            text-align: center;
+        }
+
+        .change-location-btn {
+            margin-top: 0.8rem;
+            padding: 0.5rem 1rem;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
             transition: all 0.3s;
         }
 
-        .photo-upgrade:hover {
+        .change-location-btn:hover {
+            background: #d0d0d0;
+        }
+
+        /* Photo Tiers */
+        .photo-tiers {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px dashed #e0e0e0;
+        }
+
+        .photo-tier-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .tier-option {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border: 2px solid #e0e0e0;
+        }
+
+        .tier-free {
+            border-color: #9ca3af;
+        }
+
+        .tier-basic {
             border-color: #667eea;
-            background: #f0f4ff;
         }
 
-        .photo-upgrade-icon {
-            font-size: 2rem;
+        .tier-premium {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+        }
+
+        .tier-badge {
+            font-weight: 700;
+            font-size: 1rem;
             margin-bottom: 0.5rem;
+            color: #333;
         }
 
-        .photo-upgrade-text {
-            color: #555;
+        .tier-description {
+            color: #666;
             font-size: 0.9rem;
         }
 
-        .photo-upgrade-price {
-            color: #667eea;
-            font-weight: 700;
-            margin-top: 0.5rem;
+        .tier-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: #555;
         }
 
         .form-buttons {
@@ -472,9 +650,115 @@
             color: #333;
         }
 
+        .btn-preview:hover {
+            background: #d0d0d0;
+        }
+
         .btn-submit {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-submit:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Map Modal */
+        .map-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 10000;
+            flex-direction: column;
+        }
+
+        .map-modal.show {
+            display: flex;
+        }
+
+        .map-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #667eea;
+            color: white;
+        }
+
+        .map-modal-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .map-modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .map-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .map-container {
+            flex: 1;
+            width: 100%;
+        }
+
+        .map-modal-footer {
+            padding: 1rem 1.5rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .map-selected-address {
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: #f0f4ff;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .map-confirm-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .map-confirm-btn:disabled {
+            background: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .map-confirm-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .success-message {
@@ -509,6 +793,51 @@
             cursor: pointer;
         }
 
+        /* Listings Grid */
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .listing-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .listing-title {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-location {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .listing-description {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .listing-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
         @media (max-width: 768px) {
             .desktop-nav {
                 display: none;
@@ -516,27 +845,32 @@
             .hamburger {
                 display: flex;
             }
+            .location-buttons {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Install Banner -->
     <div class="install-banner" id="installBanner">
         <div class="install-banner-content">
             <img src="tangle-me-logo-original.png" alt="Tangle-me" class="install-banner-icon">
             <div>
-                <div class="install-banner-title" id="installTitle">Install Tangle-me</div>
-                <div class="install-banner-desc" id="installDesc">Access faster, works offline!</div>
+                <div class="install-banner-title">Install Tangle-me</div>
+                <div class="install-banner-desc">Access faster, works offline!</div>
             </div>
         </div>
         <button class="install-btn install-btn-primary" id="installAccept">Install</button>
         <button class="install-btn install-btn-secondary" id="installDismiss">Later</button>
     </div>
 
+    <!-- Header -->
     <header class="header">
-        <button class="test-btn" onclick="alert('Test listings coming soon!')" id="testBtn">
+        <button class="test-btn" onclick="openListingsModal()">
             🔷 <span id="testDemo">Tangle-me test</span>
         </button>
-        <div style="display:flex; align-items:center; gap:0.5rem;">
+        <div class="header-right">
             <select class="language-select" id="languageSelect" onchange="changeLanguage()">
                 <option value="en">GB English</option>
                 <option value="pt">BR Português</option>
@@ -549,18 +883,26 @@
             </select>
             
             <div class="desktop-nav">
-                <button class="btn btn-login" id="loginBtn">Log In</button>
-                <button class="btn btn-signup" id="signupBtn">Sign Up</button>
-                <button class="btn btn-about" id="aboutBtn" onclick="alert('About modal coming soon!')">About</button>
+                <button class="btn btn-login">Log In</button>
+                <button class="btn btn-signup">Sign Up</button>
+                <button class="btn btn-about" onclick="openAboutModal()">About</button>
             </div>
 
-            <div class="hamburger" id="hamburger">
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
             </div>
         </div>
     </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-item login">Log In</button>
+        <button class="mobile-menu-item signup">Sign Up</button>
+        <button class="mobile-menu-item about" onclick="openAboutModal(); closeMenu();">About</button>
+    </div>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
     <main class="main">
         <div>
@@ -570,26 +912,26 @@
         <div class="features">
             <button class="feature-btn" onclick="openPostModal()">
                 <div class="feature-icon post-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 24 24" fill="none">
                         <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
                     </svg>
                 </div>
                 <div>
-                    <div class="feature-title" id="postFree">Post Free</div>
-                    <div class="feature-desc" id="postFreeDesc">Text ads are always free</div>
+                    <div class="feature-title">Post Free</div>
+                    <div class="feature-desc">Text ads are always free</div>
                 </div>
             </button>
 
             <button class="feature-btn">
                 <div class="feature-icon find-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 24 24" fill="none">
                         <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2.5"/>
                         <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
                     </svg>
                 </div>
                 <div>
-                    <div class="feature-title" id="find">Find</div>
-                    <div class="feature-desc" id="findDesc">Search by distance or location</div>
+                    <div class="feature-title">Find</div>
+                    <div class="feature-desc">Search by distance or location</div>
                 </div>
             </button>
 
@@ -598,146 +940,229 @@
                     <span style="font-size: 20px;">🔷</span>
                 </div>
                 <div>
-                    <div class="feature-title" id="myTangles">My Tangles</div>
-                    <div class="feature-desc" id="myTanglesDesc">Save trusted contacts</div>
+                    <div class="feature-title">My Tangles</div>
+                    <div class="feature-desc">Save trusted contacts</div>
                 </div>
             </button>
         </div>
 
-        <button class="btn-cta" id="signupFree">Sign Up Free</button>
+        <button class="btn-cta">Sign Up Free</button>
     </main>
 
     <!-- Post Free Modal -->
     <div class="modal" id="postModal">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closePostModal()">×</button>
-            <h2 class="modal-title" id="postModalTitle">Post Your Ad - Free Forever!</h2>
+            <h2 class="modal-title">Post Your Ad - Free Forever!</h2>
             
             <form class="post-form" id="postForm" onsubmit="handlePostSubmit(event)">
+                <!-- Keywords -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span id="labelWhatSelling">What are you selling?</span> <span class="form-required">*</span>
+                        Keywords describing your offer: (product, service, website, etc.)
                     </label>
                     <input 
                         type="text" 
                         class="form-input" 
-                        id="adTitle" 
-                        maxlength="50" 
-                        required
-                        oninput="updateCharCounter('adTitle', 'titleCounter', 50)"
+                        id="adKeywords" 
+                        maxlength="50"
+                        placeholder="e.g., Au pair service, Web design, Car rental"
+                        oninput="updateCharCounter('adKeywords', 'keywordsCounter', 50)"
                     >
-                    <div class="char-counter" id="titleCounter">0/50</div>
+                    <div class="char-counter" id="keywordsCounter">0/50</div>
                 </div>
 
+                <!-- Description -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span id="labelDescription">Tell us more</span> <span class="form-required">*</span>
+                        Additional ad description:
                     </label>
                     <textarea 
                         class="form-input form-textarea" 
                         id="adDescription" 
-                        maxlength="300" 
-                        required
+                        maxlength="300"
+                        placeholder="Provide more details. URLs and emails will become clickable links."
                         oninput="updateCharCounter('adDescription', 'descCounter', 300)"
                     ></textarea>
                     <div class="char-counter" id="descCounter">0/300</div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" id="labelPrice">Price (Optional)</label>
-                    <div class="price-group">
-                        <input 
-                            type="number" 
-                            class="form-input price-input" 
-                            id="adPrice" 
-                            min="0" 
-                            step="0.01"
-                            placeholder="0.00"
-                        >
-                        <select class="currency-select" id="currency">
-                            <option value="USD">USD $</option>
-                            <option value="EUR">EUR €</option>
-                            <option value="GBP">GBP £</option>
-                            <option value="ZAR">ZAR R</option>
-                            <option value="BRL">BRL R$</option>
-                            <option value="AED">AED د.إ</option>
-                            <option value="CNY">CNY ¥</option>
-                            <option value="JPY">JPY ¥</option>
-                        </select>
+                <!-- Location -->
+                <div class="form-group location-section">
+                    <label class="form-label">
+                        Advert Location: <span class="form-required">*</span>
+                    </label>
+                    
+                    <div class="location-info" style="margin-bottom: 1rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">📍 Posted from:</div>
+                        <div class="location-detected" id="postedFromLocation">Detecting...</div>
+                        <div style="font-size: 0.85rem; margin-top: 0.3rem; opacity: 0.8;">
+                            (Auto-detected from your device)
+                        </div>
+                    </div>
+
+                    <div class="item-location-selector">
+                        <div style="font-weight: 600; margin-bottom: 0.8rem;">
+                            📍 Item location: <span class="form-required">*</span>
+                        </div>
+                        
+                        <div class="location-buttons">
+                            <button type="button" class="location-btn" onclick="useCurrentLocation()">
+                                <span>📍</span>
+                                <span>Use Current Location</span>
+                            </button>
+                            <button type="button" class="location-btn" onclick="openMapPicker()">
+                                <span>🗺️</span>
+                                <span>Drop Pin on Map</span>
+                            </button>
+                        </div>
+
+                        <div class="selected-location" id="selectedLocationDisplay" style="display: none;">
+                            <div style="color: #4ade80; font-weight: 600; font-size: 1rem;">
+                                ✅ <span id="selectedLocationText"></span>
+                            </div>
+                            <button type="button" class="change-location-btn" onclick="clearItemLocation()">
+                                Change Location
+                            </button>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Contact -->
                 <div class="form-group">
-                    <label class="form-label">
-                        <span id="labelLocation">Where is the item?</span> <span class="form-required">*</span>
-                    </label>
+                    <label class="form-label">Your contact</label>
                     <input 
                         type="text" 
                         class="form-input" 
-                        id="adLocation" 
-                        required
-                        placeholder="e.g. London, UK"
+                        id="adContact"
+                        placeholder="Email, phone, or WhatsApp"
                     >
                 </div>
 
-                <div class="location-info">
-                    <div>📍 <span id="labelYourLocation">Your location:</span> <span class="location-detected" id="userLocation">Detecting...</span></div>
-                    <div style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;" id="labelLocationNote">
-                        (Automatically detected when you post)
+                <!-- Photo Tiers -->
+                <div class="photo-tiers">
+                    <div class="photo-tier-title">📷 Add Photos</div>
+                    
+                    <div class="tier-option tier-free">
+                        <div class="tier-badge">Free Tier</div>
+                        <div class="tier-description">Text only</div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">
-                        <span id="labelContact">Your contact</span> <span class="form-required">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        class="form-input" 
-                        id="adContact" 
-                        required
-                        placeholder="Email or phone"
-                    >
-                </div>
+                    <div class="tier-option tier-basic">
+                        <div class="tier-badge">💎 $2.99/month per ad</div>
+                        <div class="tier-features">
+                            <div>✓ Up to 20 photos per ad</div>
+                            <div>✓ Edit anytime during subscription</div>
+                            <div>✓ 90-day active period</div>
+                        </div>
+                    </div>
 
-                <div class="photo-upgrade" onclick="alert(document.getElementById('upgradeMessage').textContent)">
-                    <div class="photo-upgrade-icon">📷</div>
-                    <div class="photo-upgrade-text" id="labelAddPhotos">Add Photos</div>
-                    <div class="photo-upgrade-price" id="upgradeMessage">Upgrade to $2.99/month to add photos 🔒</div>
+                    <div class="tier-option tier-premium">
+                        <div class="tier-badge">💎💎 $9.99/month per ad</div>
+                        <div class="tier-features">
+                            <div>✓ Unlimited photos per ad</div>
+                            <div>✓ Edit anytime during subscription</div>
+                            <div>✓ 90-day active period</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-buttons">
-                    <button type="button" class="form-btn btn-preview" id="btnPreview" onclick="previewAd()">Preview</button>
-                    <button type="submit" class="form-btn btn-submit" id="btnSubmit">Post Free Ad</button>
+                    <button type="button" class="form-btn btn-preview" onclick="previewAd()">
+                        Preview
+                    </button>
+                    <button type="submit" class="form-btn btn-submit" id="btnSubmit" disabled>
+                        Post Free Ad
+                    </button>
                 </div>
             </form>
 
             <div class="success-message" id="successMessage" style="display: none;">
                 <div class="success-icon">✅</div>
-                <h3 class="success-title" id="successTitle">Ad Posted Successfully!</h3>
-                <p class="success-text" id="successText">Your ad is now live and visible to users worldwide.</p>
-                <button class="btn-success" onclick="closePostModal()" id="btnDone">Done</button>
+                <h3 class="success-title">Ad Posted Successfully!</h3>
+                <p class="success-text">Your ad is now live and visible to users worldwide.</p>
+                <button class="btn-success" onclick="closePostModal()">Done</button>
             </div>
         </div>
     </div>
 
+    <!-- Map Modal -->
+    <div class="map-modal" id="mapModal">
+        <div class="map-modal-header">
+            <h3>Drop Pin on Map</h3>
+            <button class="map-modal-close" onclick="closeMapPicker()">✕</button>
+        </div>
+        <div id="mapContainer" class="map-container"></div>
+        <div class="map-modal-footer">
+            <div class="map-selected-address" id="mapSelectedAddress">
+                Click on the map to select location
+            </div>
+            <button class="map-confirm-btn" id="mapConfirmBtn" onclick="confirmMapLocation()" disabled>
+                Confirm Location
+            </button>
+        </div>
+    </div>
+
+    <!-- Test Listings Modal -->
+    <div class="modal" id="listingsModal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('listingsModal')">×</button>
+            <h2 class="modal-title">Sample Listings</h2>
+            
+            <div class="listings-grid">
+                <div class="listing-card">
+                    <h3 class="listing-title">Victorian House</h3>
+                    <div class="listing-location">📍 Chelsea, London, UK</div>
+                    <p class="listing-description">Beautiful 3-bed Victorian house with garden</p>
+                    <div class="listing-price">£1,200,000</div>
+                </div>
+                <div class="listing-card">
+                    <h3 class="listing-title">BMW Motorcycle</h3>
+                    <div class="listing-location">📍 Munich, Germany</div>
+                    <p class="listing-description">Classic 1975 BMW R90S in excellent condition</p>
+                    <div class="listing-price">€8,500</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
+            <h2 class="modal-title">About Tangle-me</h2>
+            <p style="color:#555; line-height:1.6;">
+                Welcome to Tangle-me, the global classifieds platform where text ads are free forever! 
+                Connect with people worldwide through simple, effective advertising.
+            </p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/sw-register.js"></script>
     <script>
+        // Global variables
+        let map = null;
+        let marker = null;
         let userLocationData = {
             country: '',
             countryCode: '',
-            city: '',
             flag: ''
+        };
+        let itemLocationData = {
+            address: '',
+            latitude: null,
+            longitude: null
         };
 
         const countryFlags = {
             'US': '🇺🇸', 'GB': '🇬🇧', 'BR': '🇧🇷', 'DE': '🇩🇪', 'DK': '🇩🇰',
             'JP': '🇯🇵', 'CN': '🇨🇳', 'ES': '🇪🇸', 'FR': '🇫🇷', 'ZA': '🇿🇦',
-            'AE': '🇦🇪', 'AU': '🇦🇺', 'CA': '🇨🇦', 'IN': '🇮🇳', 'IT': '🇮🇹',
-            'MX': '🇲🇽', 'NL': '🇳🇱', 'PT': '🇵🇹', 'RU': '🇷🇺', 'SE': '🇸🇪'
+            'AE': '🇦🇪', 'AU': '🇦🇺', 'CA': '🇨🇦', 'IN': '🇮🇳', 'IT': '🇮🇹'
         };
 
-        function detectUserLocation() {
+        // Detect poster location
+        function detectPosterLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -749,368 +1174,220 @@
                             .then(data => {
                                 const countryCode = data.address.country_code.toUpperCase();
                                 const country = data.address.country;
-                                const city = data.address.city || data.address.town || data.address.village || '';
                                 const flag = countryFlags[countryCode] || '🌍';
                                 
-                                userLocationData = {
-                                    country: country,
-                                    countryCode: countryCode,
-                                    city: city,
-                                    flag: flag
-                                };
-                                
-                                document.getElementById('userLocation').textContent = 
-                                    `${flag} ${countryCode}${city ? ' (' + city + ')' : ''}`;
+                                userLocationData = { country, countryCode, flag };
+                                document.getElementById('postedFromLocation').textContent = `${flag} ${country}`;
                             })
                             .catch(() => {
-                                document.getElementById('userLocation').textContent = '🌍 Location not shared';
+                                document.getElementById('postedFromLocation').textContent = '🌍 Location not shared';
                             });
                     },
                     () => {
-                        document.getElementById('userLocation').textContent = '🌍 Location not shared';
+                        document.getElementById('postedFromLocation').textContent = '🌍 Location not shared';
                     }
                 );
-            } else {
-                document.getElementById('userLocation').textContent = '🌍 Location not shared';
             }
         }
 
+        // Use current location
+        function useCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const city = data.address.city || data.address.town || data.address.village || '';
+                                const country = data.address.country;
+                                const address = city ? `${city}, ${country}` : country;
+                                
+                                itemLocationData = {
+                                    address: address,
+                                    latitude: lat,
+                                    longitude: lon
+                                };
+                                
+                                showSelectedLocation(address);
+                            });
+                    },
+                    () => {
+                        alert('Please enable location permissions');
+                    }
+                );
+            }
+        }
+
+        // Open map picker
+        function openMapPicker() {
+            document.getElementById('mapModal').classList.add('show');
+            if (!map) {
+                setTimeout(() => {
+                    map = L.map('mapContainer').setView([51.505, -0.09], 10);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap'
+                    }).addTo(map);
+                    
+                    map.on('click', function(e) {
+                        if (marker) {
+                            map.removeLayer(marker);
+                        }
+                        marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+                        
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const city = data.address.city || data.address.town || data.address.village || '';
+                                const country = data.address.country;
+                                const address = city ? `${city}, ${country}` : country;
+                                
+                                document.getElementById('mapSelectedAddress').textContent = address;
+                                document.getElementById('mapConfirmBtn').disabled = false;
+                                
+                                itemLocationData = {
+                                    address: address,
+                                    latitude: e.latlng.lat,
+                                    longitude: e.latlng.lng
+                                };
+                            });
+                    });
+                }, 100);
+            }
+        }
+
+        // Close map picker
+        function closeMapPicker() {
+            document.getElementById('mapModal').classList.remove('show');
+        }
+
+        // Confirm map location
+        function confirmMapLocation() {
+            showSelectedLocation(itemLocationData.address);
+            closeMapPicker();
+        }
+
+        // Show selected location
+        function showSelectedLocation(address) {
+            document.getElementById('selectedLocationText').textContent = address;
+            document.getElementById('selectedLocationDisplay').style.display = 'block';
+            document.getElementById('btnSubmit').disabled = false;
+        }
+
+        // Clear item location
+        function clearItemLocation() {
+            document.getElementById('selectedLocationDisplay').style.display = 'none';
+            document.getElementById('btnSubmit').disabled = true;
+            itemLocationData = { address: '', latitude: null, longitude: null };
+        }
+
+        // Character counter
+        function updateCharCounter(inputId, counterId, maxLength) {
+            const input = document.getElementById(inputId);
+            const counter = document.getElementById(counterId);
+            const length = input.value.length;
+            counter.textContent = `${length}/${maxLength}`;
+            counter.classList.toggle('warning', length >= maxLength * 0.9);
+        }
+
+        // Preview ad
+        function previewAd() {
+            const keywords = document.getElementById('adKeywords').value;
+            const description = document.getElementById('adDescription').value;
+            const contact = document.getElementById('adContact').value;
+            
+            if (!itemLocationData.address) {
+                alert('Please set item location first!');
+                return;
+            }
+            
+            const preview = `
+═══════════════════════
+📢 AD PREVIEW
+═══════════════════════
+
+Keywords: ${keywords || 'None'}
+
+${description || 'No description'}
+
+📍 Posted from: ${userLocationData.flag} ${userLocationData.country}
+📍 Item location: ${itemLocationData.address}
+📧 Contact: ${contact || 'Not provided'}
+
+═══════════════════════
+            `;
+            alert(preview);
+        }
+
+        // Submit form
+        function handlePostSubmit(event) {
+            event.preventDefault();
+            document.getElementById('postForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            console.log('Ad submitted:', {
+                keywords: document.getElementById('adKeywords').value,
+                description: document.getElementById('adDescription').value,
+                contact: document.getElementById('adContact').value,
+                postedFrom: userLocationData,
+                itemLocation: itemLocationData
+            });
+        }
+
+        // Modal functions
         function openPostModal() {
             document.getElementById('postModal').classList.add('show');
-            document.getElementById('postForm').style.display = 'flex';
-            document.getElementById('successMessage').style.display = 'none';
-            detectUserLocation();
+            detectPosterLocation();
         }
 
         function closePostModal() {
             document.getElementById('postModal').classList.remove('show');
             document.getElementById('postForm').reset();
-            updateCharCounter('adTitle', 'titleCounter', 50);
-            updateCharCounter('adDescription', 'descCounter', 300);
+            document.getElementById('postForm').style.display = 'flex';
+            document.getElementById('successMessage').style.display = 'none';
+            clearItemLocation();
         }
 
-        function updateCharCounter(inputId, counterId, maxLength) {
-            const input = document.getElementById(inputId);
-            const counter = document.getElementById(counterId);
-            const currentLength = input.value.length;
-            
-            counter.textContent = `${currentLength}/${maxLength}`;
-            
-            if (currentLength >= maxLength * 0.9) {
-                counter.classList.add('warning');
-            } else {
-                counter.classList.remove('warning');
-            }
+        function openListingsModal() {
+            document.getElementById('listingsModal').classList.add('show');
         }
 
-        function previewAd() {
-            const title = document.getElementById('adTitle').value;
-            const description = document.getElementById('adDescription').value;
-            const price = document.getElementById('adPrice').value;
-            const currency = document.getElementById('currency').value;
-            const location = document.getElementById('adLocation').value;
-            const contact = document.getElementById('adContact').value;
-            
-            if (!title || !description || !location || !contact) {
-                alert('Please fill in all required fields!');
-                return;
-            }
-            
-            const priceText = price ? `${currency} ${price}` : 'Price not specified';
-            const userLoc = userLocationData.flag ? 
-                `${userLocationData.flag} ${userLocationData.countryCode}` : 
-                '🌍 Global';
-            
-            const previewText = `
-═══════════════════════
-📢 AD PREVIEW
-═══════════════════════
-
-${title}
-
-${description}
-
-💰 Price: ${priceText}
-📍 Item Location: ${location}
-👤 Posted by: ${userLoc}
-📧 Contact: ${contact}
-
-═══════════════════════
-            `;
-            
-            alert(previewText);
+        function openAboutModal() {
+            document.getElementById('aboutModal').classList.add('show');
         }
 
-        function handlePostSubmit(event) {
-            event.preventDefault();
-            
-            document.getElementById('postForm').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
-            
-            console.log('Ad submitted:', {
-                title: document.getElementById('adTitle').value,
-                description: document.getElementById('adDescription').value,
-                price: document.getElementById('adPrice').value,
-                currency: document.getElementById('currency').value,
-                location: document.getElementById('adLocation').value,
-                contact: document.getElementById('adContact').value,
-                posterLocation: userLocationData
-            });
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
         }
 
-        const translations = {
-            en: {
-                testDemo: 'Tangle-me test',
-                postFree: 'Post Free',
-                postFreeDesc: 'Text ads are always free',
-                find: 'Find',
-                findDesc: 'Search by distance or location',
-                myTangles: 'My Tangles',
-                myTanglesDesc: 'Save trusted contacts',
-                signupFree: 'Sign Up Free',
-                installTitle: 'Install Tangle-me',
-                installDesc: 'Access faster, works offline!',
-                postModalTitle: 'Post Your Ad - Free Forever!',
-                labelWhatSelling: 'What are you selling?',
-                labelDescription: 'Tell us more',
-                labelPrice: 'Price (Optional)',
-                labelLocation: 'Where is the item?',
-                labelYourLocation: 'Your location:',
-                labelLocationNote: '(Automatically detected when you post)',
-                labelContact: 'Your contact',
-                labelAddPhotos: 'Add Photos',
-                upgradeMessage: 'Upgrade to $2.99/month to add photos 🔒',
-                btnPreview: 'Preview',
-                btnSubmit: 'Post Free Ad',
-                successTitle: 'Ad Posted Successfully!',
-                successText: 'Your ad is now live and visible to users worldwide.',
-                btnDone: 'Done'
-            },
-            pt: {
-                testDemo: 'Teste Tangle-me',
-                postFree: 'Poste Grátis',
-                postFreeDesc: 'Anúncios de texto são sempre gratuitos',
-                find: 'Encontrar',
-                findDesc: 'Pesquise por distância ou localização',
-                myTangles: 'Meus Tangles',
-                myTanglesDesc: 'Salve contatos confiáveis',
-                signupFree: 'Cadastre-se Grátis',
-                installTitle: 'Instalar Tangle-me',
-                installDesc: 'Acesso mais rápido, funciona offline!',
-                postModalTitle: 'Publique seu Anúncio - Grátis Para Sempre!',
-                labelWhatSelling: 'O que você está vendendo?',
-                labelDescription: 'Conte mais',
-                labelPrice: 'Preço (Opcional)',
-                labelLocation: 'Onde está o item?',
-                labelYourLocation: 'Sua localização:',
-                labelLocationNote: '(Detectado automaticamente ao publicar)',
-                labelContact: 'Seu contato',
-                labelAddPhotos: 'Adicionar Fotos',
-                upgradeMessage: 'Atualize para $2,99/mês para adicionar fotos 🔒',
-                btnPreview: 'Visualizar',
-                btnSubmit: 'Publicar Anúncio Grátis',
-                successTitle: 'Anúncio Publicado com Sucesso!',
-                successText: 'Seu anúncio está agora ativo e visível para usuários em todo o mundo.',
-                btnDone: 'Concluído'
-            },
-            de: {
-                testDemo: 'Tangle-me Test',
-                postFree: 'Kostenlos Inserieren',
-                postFreeDesc: 'Textanzeigen sind immer kostenlos',
-                find: 'Finden',
-                findDesc: 'Nach Entfernung oder Standort suchen',
-                myTangles: 'Meine Tangles',
-                myTanglesDesc: 'Vertrauenswürdige Kontakte speichern',
-                signupFree: 'Kostenlos Registrieren',
-                installTitle: 'Tangle-me Installieren',
-                installDesc: 'Schnellerer Zugriff, funktioniert offline!',
-                postModalTitle: 'Anzeige Veröffentlichen - Für Immer Kostenlos!',
-                labelWhatSelling: 'Was verkaufen Sie?',
-                labelDescription: 'Erzählen Sie mehr',
-                labelPrice: 'Preis (Optional)',
-                labelLocation: 'Wo befindet sich der Artikel?',
-                labelYourLocation: 'Ihr Standort:',
-                labelLocationNote: '(Automatisch beim Posten erkannt)',
-                labelContact: 'Ihr Kontakt',
-                labelAddPhotos: 'Fotos Hinzufügen',
-                upgradeMessage: 'Upgrade für $2,99/Monat um Fotos hinzuzufügen 🔒',
-                btnPreview: 'Vorschau',
-                btnSubmit: 'Kostenlos Inserieren',
-                successTitle: 'Anzeige Erfolgreich Veröffentlicht!',
-                successText: 'Ihre Anzeige ist jetzt live und weltweit sichtbar.',
-                btnDone: 'Fertig'
-            },
-            da: {
-                testDemo: 'Tangle-me test',
-                postFree: 'Indryk Gratis',
-                postFreeDesc: 'Tekstannoncer er altid gratis',
-                find: 'Find',
-                findDesc: 'Søg efter afstand eller placering',
-                myTangles: 'Mine Tangles',
-                myTanglesDesc: 'Gem betroede kontakter',
-                signupFree: 'Tilmeld Gratis',
-                installTitle: 'Installer Tangle-me',
-                installDesc: 'Hurtigere adgang, virker offline!',
-                postModalTitle: 'Opslå Din Annonce - Gratis For Evigt!',
-                labelWhatSelling: 'Hvad sælger du?',
-                labelDescription: 'Fortæl mere',
-                labelPrice: 'Pris (Valgfri)',
-                labelLocation: 'Hvor er varen?',
-                labelYourLocation: 'Din placering:',
-                labelLocationNote: '(Automatisk registreret ved opslag)',
-                labelContact: 'Din kontakt',
-                labelAddPhotos: 'Tilføj Billeder',
-                upgradeMessage: 'Opgrader til $2,99/måned for at tilføje billeder 🔒',
-                btnPreview: 'Forhåndsvisning',
-                btnSubmit: 'Opslå Gratis Annonce',
-                successTitle: 'Annonce Offentliggjort!',
-                successText: 'Din annonce er nu live og synlig globalt.',
-                btnDone: 'Færdig'
-            },
-            ja: {
-                testDemo: 'Tangle-meテスト',
-                postFree: '無料投稿',
-                postFreeDesc: 'テキスト広告は常に無料',
-                find: '検索',
-                findDesc: '距離または場所で検索',
-                myTangles: 'マイタングル',
-                myTanglesDesc: '信頼できる連絡先を保存',
-                signupFree: '無料登録',
-                installTitle: 'Tangle-meをインストール',
-                installDesc: 'より速くアクセス、オフラインで動作！',
-                postModalTitle: '広告を投稿 - 永久無料！',
-                labelWhatSelling: '何を販売していますか？',
-                labelDescription: '詳細を教えてください',
-                labelPrice: '価格（任意）',
-                labelLocation: '商品はどこにありますか？',
-                labelYourLocation: 'あなたの場所：',
-                labelLocationNote: '（投稿時に自動検出）',
-                labelContact: 'あなたの連絡先',
-                labelAddPhotos: '写真を追加',
-                upgradeMessage: '写真を追加するには月額$2.99にアップグレード 🔒',
-                btnPreview: 'プレビュー',
-                btnSubmit: '無料で広告を投稿',
-                successTitle: '広告が正常に投稿されました！',
-                successText: 'あなたの広告は現在ライブで世界中に表示されています。',
-                btnDone: '完了'
-            },
-            zh: {
-                testDemo: 'Tangle-me测试',
-                postFree: '免费发布',
-                postFreeDesc: '文字广告永久免费',
-                find: '查找',
-                findDesc: '按距离或位置搜索',
-                myTangles: '我的Tangles',
-                myTanglesDesc: '保存可信联系人',
-                signupFree: '免费注册',
-                installTitle: '安装Tangle-me',
-                installDesc: '访问更快，离线工作！',
-                postModalTitle: '发布您的广告 - 永久免费！',
-                labelWhatSelling: '您在出售什么？',
-                labelDescription: '告诉我们更多',
-                labelPrice: '价格（可选）',
-                labelLocation: '物品在哪里？',
-                labelYourLocation: '您的位置：',
-                labelLocationNote: '（发布时自动检测）',
-                labelContact: '您的联系方式',
-                labelAddPhotos: '添加照片',
-                upgradeMessage: '升级至每月$2.99以添加照片 🔒',
-                btnPreview: '预览',
-                btnSubmit: '免费发布广告',
-                successTitle: '广告发布成功！',
-                successText: '您的广告现在已上线并在全球可见。',
-                btnDone: '完成'
-            },
-            es: {
-                testDemo: 'Prueba Tangle-me',
-                postFree: 'Publicar Gratis',
-                postFreeDesc: 'Los anuncios de texto son siempre gratuitos',
-                find: 'Buscar',
-                findDesc: 'Buscar por distancia o ubicación',
-                myTangles: 'Mis Tangles',
-                myTanglesDesc: 'Guardar contactos de confianza',
-                signupFree: 'Registrarse Gratis',
-                installTitle: 'Instalar Tangle-me',
-                installDesc: '¡Acceso más rápido, funciona sin conexión!',
-                postModalTitle: 'Publicar Tu Anuncio - ¡Gratis Para Siempre!',
-                labelWhatSelling: '¿Qué estás vendiendo?',
-                labelDescription: 'Cuéntanos más',
-                labelPrice: 'Precio (Opcional)',
-                labelLocation: '¿Dónde está el artículo?',
-                labelYourLocation: 'Tu ubicación:',
-                labelLocationNote: '(Detectado automáticamente al publicar)',
-                labelContact: 'Tu contacto',
-                labelAddPhotos: 'Agregar Fotos',
-                upgradeMessage: 'Actualiza a $2.99/mes para agregar fotos 🔒',
-                btnPreview: 'Vista Previa',
-                btnSubmit: 'Publicar Anuncio Gratis',
-                successTitle: '¡Anuncio Publicado Exitosamente!',
-                successText: 'Tu anuncio ahora está en vivo y visible para usuarios de todo el mundo.',
-                btnDone: 'Hecho'
-            },
-            fr: {
-                testDemo: 'Test Tangle-me',
-                postFree: 'Publier Gratuitement',
-                postFreeDesc: 'Les annonces texte sont toujours gratuites',
-                find: 'Trouver',
-                findDesc: 'Rechercher par distance ou emplacement',
-                myTangles: 'Mes Tangles',
-                myTanglesDesc: 'Sauvegarder les contacts de confiance',
-                signupFree: 'Inscription Gratuite',
-                installTitle: 'Installer Tangle-me',
-                installDesc: 'Accès plus rapide, fonctionne hors ligne!',
-                postModalTitle: 'Publier Votre Annonce - Gratuit Pour Toujours!',
-                labelWhatSelling: 'Que vendez-vous?',
-                labelDescription: 'Donnez plus de détails',
-                labelPrice: 'Prix (Optionnel)',
-                labelLocation: 'Où se trouve l\'article?',
-                labelYourLocation: 'Votre emplacement:',
-                labelLocationNote: '(Détecté automatiquement lors de la publication)',
-                labelContact: 'Votre contact',
-                labelAddPhotos: 'Ajouter des Photos',
-                upgradeMessage: 'Passez à $2.99/mois pour ajouter des photos 🔒',
-                btnPreview: 'Aperçu',
-                btnSubmit: 'Publier Annonce Gratuite',
-                successTitle: 'Annonce Publiée avec Succès!',
-                successText: 'Votre annonce est maintenant en ligne et visible dans le monde entier.',
-                btnDone: 'Terminé'
-            }
-        };
+        function toggleMenu() {
+            document.getElementById('hamburger').classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.getElementById('menuOverlay').classList.toggle('show');
+        }
+
+        function closeMenu() {
+            document.getElementById('hamburger').classList.remove('active');
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('menuOverlay').classList.remove('show');
+        }
 
         function changeLanguage() {
-            const lang = document.getElementById('languageSelect').value;
-            const t = translations[lang];
-            
-            document.getElementById('testDemo').textContent = t.testDemo;
-            document.getElementById('postFree').textContent = t.postFree;
-            document.getElementById('postFreeDesc').textContent = t.postFreeDesc;
-            document.getElementById('find').textContent = t.find;
-            document.getElementById('findDesc').textContent = t.findDesc;
-            document.getElementById('myTangles').textContent = t.myTangles;
-            document.getElementById('myTanglesDesc').textContent = t.myTanglesDesc;
-            document.getElementById('signupFree').textContent = t.signupFree;
-            document.getElementById('installTitle').textContent = t.installTitle;
-            document.getElementById('installDesc').textContent = t.installDesc;
-            
-            document.getElementById('postModalTitle').textContent = t.postModalTitle;
-            document.getElementById('labelWhatSelling').textContent = t.labelWhatSelling;
-            document.getElementById('labelDescription').textContent = t.labelDescription;
-            document.getElementById('labelPrice').textContent = t.labelPrice;
-            document.getElementById('labelLocation').textContent = t.labelLocation;
-            document.getElementById('labelYourLocation').textContent = t.labelYourLocation;
-            document.getElementById('labelLocationNote').textContent = t.labelLocationNote;
-            document.getElementById('labelContact').textContent = t.labelContact;
-            document.getElementById('labelAddPhotos').textContent = t.labelAddPhotos;
-            document.getElementById('upgradeMessage').textContent = t.upgradeMessage;
-            document.getElementById('btnPreview').textContent = t.btnPreview;
-            document.getElementById('btnSubmit').textContent = t.btnSubmit;
-            document.getElementById('successTitle').textContent = t.successTitle;
-            document.getElementById('successText').textContent = t.successText;
-            document.getElementById('btnDone').textContent = t.btnDone;
+            // Language switching logic here
         }
 
-        changeLanguage();
-        detectUserLocation();
+        // Close modal on overlay click
+        document.getElementById('postModal').addEventListener('click', function(e) {
+            if (e.target === this) closePostModal();
+        });
+        document.getElementById('listingsModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal('listingsModal');
+        });
+        document.getElementById('aboutModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal('aboutModal');
+        });
     </script>
 </body>
 </html>
