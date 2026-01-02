@@ -11,7 +11,7 @@
     <meta http-equiv="Expires" content="0">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json?v=2.1">
+    <link rel="manifest" href="/manifest.json?v=2.2">
     
     <!-- iOS PWA Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,7 +24,7 @@
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
           crossorigin=""/>
     
-    <title>Tangle-me - Global Classifieds v2.1</title>
+    <title>Tangle-me - Global Classifieds v2.2</title>
     
     <style>
         * {
@@ -185,7 +185,33 @@
             font-size: 0.75rem;
             color: #718096;
             white-space: nowrap;
-            margin-left: 1rem;
+        }
+
+        .ad-delete-btn {
+            background: #f44336;
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .ad-delete-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .ad-delete-btn:active {
+            transform: scale(0.95);
         }
 
         .ad-description {
@@ -655,8 +681,8 @@
 </head>
 <body>
     <header class="header">
-        <button class="test-btn" onclick="alert('Tangle-me v2.1 - Posted Ads Display Active!')">
-            🔷 Tangle-me test v2.1
+        <button class="test-btn" onclick="alert('Tangle-me v2.2 - Delete with Ownership Active!')">
+            🔷 Tangle-me test v2.2
         </button>
     </header>
 
@@ -672,7 +698,7 @@
                 </div>
                 <div>
                     <div class="feature-title">Post Free</div>
-                    <div class="feature-desc">Text ads always free - v2.1</div>
+                    <div class="feature-desc">Text ads always free - v2.2</div>
                 </div>
             </button>
         </div>
@@ -831,18 +857,35 @@
             crossorigin=""></script>
 
     <script>
-        console.log('=== TANGLE-ME v2.1 LOADED ===');
+        console.log('=== TANGLE-ME v2.2 LOADED ===');
         console.log('Leaflet loaded:', typeof L !== 'undefined');
 
         let userLocationData = { country: '', countryCode: '', flag: '' };
         let itemLocationData = { address: '', latitude: null, longitude: null };
         let map = null;
         let marker = null;
+        let currentSessionId = '';
 
-        // Load and display posted ads on page load
+        // Initialize session ID and load posted ads on page load
         window.addEventListener('DOMContentLoaded', function() {
+            initializeSession();
             loadPostedAds();
         });
+
+        // INITIALIZE SESSION ID FOR OWNERSHIP TRACKING
+        function initializeSession() {
+            // Check if user already has a session ID
+            currentSessionId = localStorage.getItem('tangleMeSessionId');
+            
+            if (!currentSessionId) {
+                // Generate new unique session ID
+                currentSessionId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('tangleMeSessionId', currentSessionId);
+                console.log('New session created:', currentSessionId);
+            } else {
+                console.log('Existing session loaded:', currentSessionId);
+            }
+        }
 
         // LOAD POSTED ADS FROM LOCALSTORAGE
         function loadPostedAds() {
@@ -863,11 +906,21 @@
             // Sort by date (newest first)
             ads.sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate));
 
-            adsContainer.innerHTML = ads.map(ad => `
-                <div class="ad-card">
+            adsContainer.innerHTML = ads.map(ad => {
+                const isOwner = ad.ownerId === currentSessionId;
+                
+                return `
+                <div class="ad-card" id="ad-${ad.id}">
                     <div class="ad-header">
                         <div class="ad-keywords">${ad.keywords || 'Untitled Ad'}</div>
-                        <div class="ad-date">${formatDate(ad.postedDate)}</div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <div class="ad-date">${formatDate(ad.postedDate)}</div>
+                            ${isOwner ? `
+                                <button class="ad-delete-btn" onclick="deleteAd('${ad.id}')" title="Delete this ad">
+                                    ×
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                     
                     ${ad.description ? `<div class="ad-description">${ad.description}</div>` : ''}
@@ -890,7 +943,8 @@
                         </div>
                     ` : ''}
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
             console.log(`Loaded ${ads.length} ads from localStorage`);
         }
@@ -910,6 +964,53 @@
             if (diffDays < 7) return `${diffDays}d ago`;
             
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // DELETE AD FUNCTION WITH CONFIRMATION
+        function deleteAd(adId) {
+            // Confirmation prompt
+            if (!confirm('Are you sure you want to delete this ad? This action cannot be undone.')) {
+                return;
+            }
+
+            // Get current ads from localStorage
+            const ads = JSON.parse(localStorage.getItem('tangleMeAds') || '[]');
+            
+            // Find and verify ownership
+            const adToDelete = ads.find(ad => ad.id === adId);
+            if (!adToDelete) {
+                alert('Ad not found!');
+                return;
+            }
+
+            if (adToDelete.ownerId !== currentSessionId) {
+                alert('You can only delete your own ads!');
+                return;
+            }
+
+            // Animate removal
+            const adElement = document.getElementById(`ad-${adId}`);
+            if (adElement) {
+                adElement.style.transition = 'all 0.3s ease-out';
+                adElement.style.opacity = '0';
+                adElement.style.transform = 'translateX(100px)';
+                
+                setTimeout(() => {
+                    // Remove from localStorage
+                    const updatedAds = ads.filter(ad => ad.id !== adId);
+                    localStorage.setItem('tangleMeAds', JSON.stringify(updatedAds));
+                    
+                    console.log(`Ad ${adId} deleted successfully`);
+                    
+                    // Reload ads display
+                    loadPostedAds();
+                }, 300);
+            } else {
+                // No animation, just delete
+                const updatedAds = ads.filter(ad => ad.id !== adId);
+                localStorage.setItem('tangleMeAds', JSON.stringify(updatedAds));
+                loadPostedAds();
+            }
         }
 
         function detectPosterLocation() {
@@ -1067,9 +1168,10 @@ ${document.getElementById('adDescription').value || 'No description'}
         function handlePostSubmit(event) {
             event.preventDefault();
             
-            // Create ad object
+            // Create ad object with ownership
             const adData = {
                 id: Date.now().toString(),
+                ownerId: currentSessionId,
                 keywords: document.getElementById('adKeywords').value,
                 description: document.getElementById('adDescription').value,
                 contact: document.getElementById('adContact').value,
