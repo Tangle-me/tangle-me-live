@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#667eea">
     
+    <!-- CACHE BUSTING - Force reload -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json?v=2.1">
     
     <!-- iOS PWA Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,9 +20,12 @@
     <link rel="apple-touch-icon" href="/tangle-me-logo-original.png">
     
     <!-- Leaflet CSS for Maps -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
     
-    <title>Tangle-me - Global Classifieds</title>
+    <title>Tangle-me - Global Classifieds v2.1</title>
+    
     <style>
         * {
             margin: 0;
@@ -27,8 +35,7 @@
 
         html, body {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
@@ -37,75 +44,8 @@
             color: #fff;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            height: 100dvh;
         }
 
-        /* Install Banner */
-        .install-banner {
-            position: fixed;
-            bottom: -100px;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: clamp(0.8rem, 2vh, 1.2rem);
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            z-index: 10000;
-            transition: bottom 0.3s;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .install-banner.show {
-            bottom: 0;
-        }
-
-        .install-banner-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .install-banner-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-        }
-
-        .install-banner-title {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 0.2rem;
-        }
-
-        .install-banner-desc {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
-
-        .install-btn {
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .install-btn-primary {
-            background: #4ade80;
-            color: #fff;
-        }
-
-        .install-btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-        }
-
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -127,153 +67,6 @@
             font-weight: 600;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .test-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .language-select {
-            padding: 0.4rem 0.6rem;
-            border-radius: 8px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .language-select option {
-            background: #667eea;
-            color: #fff;
-        }
-
-        .desktop-nav {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn {
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-
-        .btn-login {
-            background: #4ade80;
-            color: #fff;
-        }
-
-        .btn-signup {
-            background: #ff6b35;
-            color: #fff;
-        }
-
-        .btn-about {
-            background: #8b5cf6;
-            color: #fff;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-        }
-
-        .hamburger-line {
-            width: 20px;
-            height: 2px;
-            background: #fff;
-            transition: all 0.3s;
-        }
-
-        .hamburger.active .hamburger-line:nth-child(1) {
-            transform: rotate(45deg) translateY(6px);
-        }
-
-        .hamburger.active .hamburger-line:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active .hamburger-line:nth-child(3) {
-            transform: rotate(-45deg) translateY(-6px);
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 50px;
-            right: -100%;
-            width: min(280px, 80vw);
-            height: calc(100vh - 50px);
-            background: rgba(102, 126, 234, 0.98);
-            backdrop-filter: blur(20px);
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
-            z-index: 99;
-            transition: right 0.3s;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem;
-            gap: 1rem;
-        }
-
-        .mobile-menu.open {
-            right: 0;
-        }
-
-        .mobile-menu-item {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-
-        .mobile-menu-item.login {
-            background: #4ade80;
-            color: #fff;
-        }
-
-        .mobile-menu-item.signup {
-            background: #ff6b35;
-            color: #fff;
-        }
-
-        .mobile-menu-item.about {
-            background: #8b5cf6;
-            color: #fff;
-        }
-
-        .menu-overlay {
-            display: none;
-            position: fixed;
-            top: 50px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 98;
-        }
-
-        .menu-overlay.show {
-            display: block;
         }
 
         .main {
@@ -281,15 +74,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            gap: 1rem;
-            overflow-y: auto;
+            padding: 2rem 1rem;
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
         }
 
         .brand-logo {
             width: 100px;
-            height: auto;
             border-radius: 15px;
         }
 
@@ -310,49 +103,28 @@
             align-items: center;
             gap: 0.8rem;
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
             min-height: 60px;
             transition: all 0.3s;
         }
 
         .feature-btn:hover {
             transform: translateX(6px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
         .feature-icon {
             width: 36px;
             height: 36px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .post-icon {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .find-icon {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .tangles-icon {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
-
-        .feature-icon svg {
-            width: 18px;
-            height: 18px;
-            color: #fff;
         }
 
         .feature-title {
             font-size: 0.95rem;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 0.15rem;
         }
 
         .feature-desc {
@@ -360,24 +132,146 @@
             color: #718096;
         }
 
-        .btn-cta {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: #fff;
-            border: none;
-            padding: 0.7rem 2rem;
-            font-size: 0.95rem;
+        /* POSTED ADS SECTION - NEW */
+        .posted-ads-section {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
             font-weight: 700;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-            transition: all 0.3s;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .btn-cta:hover {
-            transform: translateY(-2px);
+        .ads-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        /* Modal Styles */
+        .ad-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .ad-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .ad-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .ad-keywords {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            flex: 1;
+        }
+
+        .ad-date {
+            font-size: 0.75rem;
+            color: #718096;
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+
+        .ad-description {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .ad-locations {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .ad-location-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+
+        .ad-location-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .ad-location-label {
+            font-weight: 600;
+        }
+
+        .ad-location-value {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .ad-contact {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .ad-contact-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .ad-contact-value {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .no-ads-message {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .no-ads-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-ads-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-ads-subtext {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -421,15 +315,6 @@
             border-radius: 50%;
             font-size: 1.5rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .modal-close:hover {
-            background: #d32f2f;
-            transform: rotate(90deg);
         }
 
         .modal-title {
@@ -439,7 +324,59 @@
             text-align: center;
         }
 
-        /* Post Form Styles */
+        /* SUCCESS MODAL STYLES - NEW */
+        .success-modal-content {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            color: #333;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+        }
+
+        .success-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #22c55e;
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            color: #4a5568;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .success-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .success-btn:hover {
+            transform: scale(1.05);
+        }
+
         .post-form {
             display: flex;
             flex-direction: column;
@@ -467,14 +404,12 @@
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 0.9rem;
-            transition: all 0.3s;
             font-family: inherit;
         }
 
         .form-input:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .form-textarea {
@@ -488,11 +423,6 @@
             text-align: right;
         }
 
-        .char-counter.warning {
-            color: #ff6b35;
-        }
-
-        /* Location Section Styles */
         .location-section {
             background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
             padding: 1.5rem;
@@ -504,9 +434,7 @@
             background: rgba(255, 255, 255, 0.7);
             padding: 1rem;
             border-radius: 8px;
-            border-left: 4px solid #667eea;
-            font-size: 0.9rem;
-            color: #555;
+            margin-bottom: 1rem;
         }
 
         .location-detected {
@@ -518,30 +446,29 @@
         .location-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
         }
 
         .location-btn {
-            padding: 1rem;
+            background: #fff;
             border: 2px solid #667eea;
-            border-radius: 8px;
-            background: white;
+            border-radius: 10px;
+            padding: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
             font-weight: 600;
             color: #667eea;
+            font-size: 0.85rem;
+            transition: all 0.3s;
         }
 
         .location-btn:hover {
             background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            color: #fff;
         }
 
         .location-btn span:first-child {
@@ -549,109 +476,83 @@
         }
 
         .selected-location {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
+            background: rgba(74, 222, 128, 0.1);
             border: 2px solid #4ade80;
-            text-align: center;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
         }
 
         .change-location-btn {
-            margin-top: 0.8rem;
-            padding: 0.5rem 1rem;
-            background: #e0e0e0;
+            background: #718096;
+            color: #fff;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+            width: 100%;
         }
 
-        .change-location-btn:hover {
-            background: #d0d0d0;
-        }
-
-        /* Photo Tiers */
         .photo-tiers {
-            background: #f8f9fa;
+            background: #f7fafc;
             padding: 1.5rem;
             border-radius: 12px;
-            border: 2px dashed #e0e0e0;
+            border: 2px solid #e2e8f0;
         }
 
         .photo-tier-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #333;
+            color: #2d3748;
             margin-bottom: 1rem;
-            text-align: center;
         }
 
         .tier-option {
-            background: white;
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
             padding: 1rem;
-            border-radius: 8px;
             margin-bottom: 0.8rem;
-            border: 2px solid #e0e0e0;
-        }
-
-        .tier-free {
-            border-color: #9ca3af;
-        }
-
-        .tier-basic {
-            border-color: #667eea;
-        }
-
-        .tier-premium {
-            border-color: #8b5cf6;
-            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
         }
 
         .tier-badge {
             font-weight: 700;
-            font-size: 1rem;
+            color: #667eea;
             margin-bottom: 0.5rem;
-            color: #333;
         }
 
         .tier-description {
-            color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: #718096;
         }
 
         .tier-features {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
             font-size: 0.85rem;
-            color: #555;
+            color: #4a5568;
         }
 
-        .form-buttons {
+        .form-actions {
             display: flex;
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .form-btn {
+        .btn {
             flex: 1;
-            padding: 0.9rem;
+            padding: 1rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
-            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .btn-preview {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-preview:hover {
-            background: #d0d0d0;
+            background: #e2e8f0;
+            color: #4a5568;
         }
 
         .btn-submit {
@@ -659,349 +560,169 @@
             color: #fff;
         }
 
-        .btn-submit:disabled {
-            background: #ccc;
+        .btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
-        .btn-submit:not(:disabled):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        /* MAP MODAL STYLES */
+        .map-modal-content {
+            background: #fff;
+            border-radius: 15px;
+            padding: 0;
+            max-width: 100%;
+            width: 100%;
+            height: 90vh;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Map Modal */
-        .map-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: white;
-            z-index: 10000;
-            flex-direction: column;
-        }
-
-        .map-modal.show {
-            display: flex;
-        }
-
-        .map-modal-header {
+        .map-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.5rem;
-            background: #667eea;
-            color: white;
         }
 
-        .map-modal-header h3 {
-            margin: 0;
+        .map-title {
             font-size: 1.2rem;
+            font-weight: 600;
         }
 
-        .map-modal-close {
+        .map-close {
             background: rgba(255, 255, 255, 0.2);
             border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
+            color: #fff;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .map-modal-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .map-container {
-            flex: 1;
+        #map {
             width: 100%;
+            height: calc(90vh - 180px);
         }
 
-        .map-modal-footer {
+        .map-footer {
+            background: #f7fafc;
             padding: 1rem 1.5rem;
-            background: white;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #e2e8f0;
         }
 
         .map-selected-address {
-            margin-bottom: 1rem;
-            padding: 0.8rem;
-            background: #f0f4ff;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
             color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1rem;
         }
 
         .map-confirm-btn {
-            width: 100%;
-            padding: 1rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: #fff;
             border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            width: 100%;
         }
 
         .map-confirm-btn:disabled {
-            background: #e0e0e0;
-            color: #999;
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
-        .map-confirm-btn:not(:disabled):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .success-message {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .success-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .success-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #4ade80;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-text {
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Listings Grid */
-        .listings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .listing-card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 1rem;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s;
-        }
-
-        .listing-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .listing-title {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .listing-location {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .listing-description {
-            color: #555;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 0.75rem;
-        }
-
-        .listing-price {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #ff6b35;
-        }
-
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            .hamburger {
-                display: flex;
-            }
+        @media (max-width: 600px) {
             .location-buttons {
                 grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Install Banner -->
-    <div class="install-banner" id="installBanner">
-        <div class="install-banner-content">
-            <img src="tangle-me-logo-original.png" alt="Tangle-me" class="install-banner-icon">
-            <div>
-                <div class="install-banner-title">Install Tangle-me</div>
-                <div class="install-banner-desc">Access faster, works offline!</div>
-            </div>
-        </div>
-        <button class="install-btn install-btn-primary" id="installAccept">Install</button>
-        <button class="install-btn install-btn-secondary" id="installDismiss">Later</button>
-    </div>
-
-    <!-- Header -->
     <header class="header">
-        <button class="test-btn" onclick="openListingsModal()">
-            🔷 <span id="testDemo">Tangle-me test</span>
+        <button class="test-btn" onclick="alert('Tangle-me v2.1 - Posted Ads Display Active!')">
+            🔷 Tangle-me test v2.1
         </button>
-        <div class="header-right">
-            <select class="language-select" id="languageSelect" onchange="changeLanguage()">
-                <option value="en">GB English</option>
-                <option value="pt">BR Português</option>
-                <option value="de">DE Deutsch</option>
-                <option value="da">DK Dansk</option>
-                <option value="ja">JP 日本語</option>
-                <option value="zh">CN 中文</option>
-                <option value="es">ES Español</option>
-                <option value="fr">FR Français</option>
-            </select>
-            
-            <div class="desktop-nav">
-                <button class="btn btn-login">Log In</button>
-                <button class="btn btn-signup">Sign Up</button>
-                <button class="btn btn-about" onclick="openAboutModal()">About</button>
-            </div>
-
-            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-                <div class="hamburger-line"></div>
-                <div class="hamburger-line"></div>
-                <div class="hamburger-line"></div>
-            </div>
-        </div>
     </header>
 
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-menu-item login">Log In</button>
-        <button class="mobile-menu-item signup">Sign Up</button>
-        <button class="mobile-menu-item about" onclick="openAboutModal(); closeMenu();">About</button>
-    </div>
-
-    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
-
     <main class="main">
-        <div>
-            <img src="tangle-me-logo-original.png" alt="Tangle-me" class="brand-logo">
-        </div>
+        <img src="tangle-me-logo-original.png" alt="Tangle-me" class="brand-logo">
 
         <div class="features">
             <button class="feature-btn" onclick="openPostModal()">
-                <div class="feature-icon post-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                        <path d="M12 5V19M5 12H19" stroke="white" stroke-width="3" stroke-linecap="round"/>
                     </svg>
                 </div>
                 <div>
                     <div class="feature-title">Post Free</div>
-                    <div class="feature-desc">Text ads are always free</div>
-                </div>
-            </button>
-
-            <button class="feature-btn">
-                <div class="feature-icon find-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2.5"/>
-                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="feature-title">Find</div>
-                    <div class="feature-desc">Search by distance or location</div>
-                </div>
-            </button>
-
-            <button class="feature-btn">
-                <div class="feature-icon tangles-icon">
-                    <span style="font-size: 20px;">🔷</span>
-                </div>
-                <div>
-                    <div class="feature-title">My Tangles</div>
-                    <div class="feature-desc">Save trusted contacts</div>
+                    <div class="feature-desc">Text ads always free - v2.1</div>
                 </div>
             </button>
         </div>
 
-        <button class="btn-cta">Sign Up Free</button>
+        <!-- POSTED ADS SECTION - NEW -->
+        <div class="posted-ads-section">
+            <h2 class="section-title">📢 Posted Ads</h2>
+            <div class="ads-container" id="adsContainer">
+                <!-- Ads will be dynamically loaded here -->
+                <div class="no-ads-message">
+                    <div class="no-ads-icon">📭</div>
+                    <div class="no-ads-text">No ads yet</div>
+                    <div class="no-ads-subtext">Be the first to post a free ad!</div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Post Free Modal -->
     <div class="modal" id="postModal">
-        <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-content">
             <button class="modal-close" onclick="closePostModal()">×</button>
             <h2 class="modal-title">Post Your Ad - Free Forever!</h2>
             
             <form class="post-form" id="postForm" onsubmit="handlePostSubmit(event)">
-                <!-- Keywords -->
                 <div class="form-group">
-                    <label class="form-label">
-                        Keywords describing your offer: (product, service, website, etc.)
-                    </label>
-                    <input 
-                        type="text" 
-                        class="form-input" 
-                        id="adKeywords" 
-                        maxlength="50"
-                        placeholder="e.g., Au pair service, Web design, Car rental"
-                        oninput="updateCharCounter('adKeywords', 'keywordsCounter', 50)"
-                    >
+                    <label class="form-label">Keywords describing your offer:</label>
+                    <input type="text" class="form-input" id="adKeywords" maxlength="50" 
+                           oninput="updateCharCounter('adKeywords', 'keywordsCounter', 50)">
                     <div class="char-counter" id="keywordsCounter">0/50</div>
                 </div>
 
-                <!-- Description -->
                 <div class="form-group">
-                    <label class="form-label">
-                        Additional ad description:
-                    </label>
-                    <textarea 
-                        class="form-input form-textarea" 
-                        id="adDescription" 
-                        maxlength="300"
-                        placeholder="Provide more details. URLs and emails will become clickable links."
-                        oninput="updateCharCounter('adDescription', 'descCounter', 300)"
-                    ></textarea>
+                    <label class="form-label">Additional ad description:</label>
+                    <textarea class="form-input form-textarea" id="adDescription" maxlength="300"
+                              oninput="updateCharCounter('adDescription', 'descCounter', 300)"></textarea>
                     <div class="char-counter" id="descCounter">0/300</div>
                 </div>
 
-                <!-- Location -->
                 <div class="form-group location-section">
                     <label class="form-label">
                         Advert Location: <span class="form-required">*</span>
                     </label>
                     
-                    <div class="location-info" style="margin-bottom: 1rem;">
-                        <div style="font-weight: 600; margin-bottom: 0.5rem;">📍 Posted from:</div>
+                    <div class="location-info">
+                        <div style="font-weight: 600;">📍 Posted from:</div>
                         <div class="location-detected" id="postedFromLocation">Detecting...</div>
-                        <div style="font-size: 0.85rem; margin-top: 0.3rem; opacity: 0.8;">
-                            (Auto-detected from your device)
-                        </div>
                     </div>
 
-                    <div class="item-location-selector">
+                    <div>
                         <div style="font-weight: 600; margin-bottom: 0.8rem;">
                             📍 Item location: <span class="form-required">*</span>
                         </div>
@@ -1018,7 +739,7 @@
                         </div>
 
                         <div class="selected-location" id="selectedLocationDisplay" style="display: none;">
-                            <div style="color: #4ade80; font-weight: 600; font-size: 1rem;">
+                            <div style="color: #4ade80; font-weight: 600;">
                                 ✅ <span id="selectedLocationText"></span>
                             </div>
                             <button type="button" class="change-location-btn" onclick="clearItemLocation()">
@@ -1028,316 +749,358 @@
                     </div>
                 </div>
 
-                <!-- Contact -->
                 <div class="form-group">
                     <label class="form-label">Your contact</label>
-                    <input 
-                        type="text" 
-                        class="form-input" 
-                        id="adContact"
-                        placeholder="Email, phone, or WhatsApp"
-                    >
+                    <input type="text" class="form-input" id="adContact" 
+                           placeholder="Email, phone, or WhatsApp">
                 </div>
 
-                <!-- Photo Tiers -->
                 <div class="photo-tiers">
                     <div class="photo-tier-title">📷 Add Photos</div>
                     
-                    <div class="tier-option tier-free">
+                    <div class="tier-option">
                         <div class="tier-badge">Free Tier</div>
                         <div class="tier-description">Text only</div>
                     </div>
 
-                    <div class="tier-option tier-basic">
+                    <div class="tier-option">
                         <div class="tier-badge">💎 $2.99/month per ad</div>
                         <div class="tier-features">
-                            <div>✓ Up to 20 photos per ad</div>
-                            <div>✓ Edit anytime during subscription</div>
-                            <div>✓ 90-day active period</div>
+                            ✓ Up to 20 photos per ad<br>
+                            ✓ Edit anytime during subscription<br>
+                            ✓ 90-day active period
                         </div>
                     </div>
 
-                    <div class="tier-option tier-premium">
-                        <div class="tier-badge">💎💎 $9.99/month per ad</div>
+                    <div class="tier-option">
+                        <div class="tier-badge">💎 💎 $9.99/month per ad</div>
                         <div class="tier-features">
-                            <div>✓ Unlimited photos per ad</div>
-                            <div>✓ Edit anytime during subscription</div>
-                            <div>✓ 90-day active period</div>
+                            ✓ Unlimited photos per ad<br>
+                            ✓ Edit anytime during subscription<br>
+                            ✓ 90-day active period
                         </div>
                     </div>
                 </div>
 
-                <div class="form-buttons">
-                    <button type="button" class="form-btn btn-preview" onclick="previewAd()">
+                <div class="form-actions">
+                    <button type="button" class="btn btn-preview" onclick="previewAd()">
                         Preview
                     </button>
-                    <button type="submit" class="form-btn btn-submit" id="btnSubmit" disabled>
+                    <button type="submit" class="btn btn-submit" id="btnSubmit" disabled>
                         Post Free Ad
                     </button>
                 </div>
             </form>
-
-            <div class="success-message" id="successMessage" style="display: none;">
-                <div class="success-icon">✅</div>
-                <h3 class="success-title">Ad Posted Successfully!</h3>
-                <p class="success-text">Your ad is now live and visible to users worldwide.</p>
-                <button class="btn-success" onclick="closePostModal()">Done</button>
-            </div>
         </div>
     </div>
 
-    <!-- Map Modal -->
-    <div class="map-modal" id="mapModal">
-        <div class="map-modal-header">
-            <h3>Drop Pin on Map</h3>
-            <button class="map-modal-close" onclick="closeMapPicker()">✕</button>
-        </div>
-        <div id="mapContainer" class="map-container"></div>
-        <div class="map-modal-footer">
-            <div class="map-selected-address" id="mapSelectedAddress">
-                Click on the map to select location
-            </div>
-            <button class="map-confirm-btn" id="mapConfirmBtn" onclick="confirmMapLocation()" disabled>
-                Confirm Location
-            </button>
-        </div>
-    </div>
-
-    <!-- Test Listings Modal -->
-    <div class="modal" id="listingsModal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModal('listingsModal')">×</button>
-            <h2 class="modal-title">Sample Listings</h2>
-            
-            <div class="listings-grid">
-                <div class="listing-card">
-                    <h3 class="listing-title">Victorian House</h3>
-                    <div class="listing-location">📍 Chelsea, London, UK</div>
-                    <p class="listing-description">Beautiful 3-bed Victorian house with garden</p>
-                    <div class="listing-price">£1,200,000</div>
-                </div>
-                <div class="listing-card">
-                    <h3 class="listing-title">BMW Motorcycle</h3>
-                    <div class="listing-location">📍 Munich, Germany</div>
-                    <p class="listing-description">Classic 1975 BMW R90S in excellent condition</p>
-                    <div class="listing-price">€8,500</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div class="modal" id="aboutModal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
-            <h2 class="modal-title">About Tangle-me</h2>
-            <p style="color:#555; line-height:1.6;">
-                Welcome to Tangle-me, the global classifieds platform where text ads are free forever! 
-                Connect with people worldwide through simple, effective advertising.
+    <!-- Success Modal - NEW -->
+    <div class="modal" id="successModal">
+        <div class="success-modal-content">
+            <div class="success-icon">✓</div>
+            <h2 class="success-title">Ad Posted Successfully!</h2>
+            <p class="success-message">
+                Your ad is now live and visible to users worldwide.
             </p>
+            <button class="success-btn" onclick="closeSuccessModal()">Done</button>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="/sw-register.js"></script>
+    <!-- Map Picker Modal -->
+    <div class="modal" id="mapModal">
+        <div class="map-modal-content">
+            <div class="map-header">
+                <div class="map-title">Drop Pin on Map</div>
+                <button class="map-close" onclick="closeMapPicker()">×</button>
+            </div>
+            <div id="map"></div>
+            <div class="map-footer">
+                <div class="map-selected-address" id="mapSelectedAddress">
+                    Click on the map to select location
+                </div>
+                <button class="map-confirm-btn" id="mapConfirmBtn" onclick="confirmMapLocation()" disabled>
+                    Confirm Location
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+
     <script>
-        // Global variables
+        console.log('=== TANGLE-ME v2.1 LOADED ===');
+        console.log('Leaflet loaded:', typeof L !== 'undefined');
+
+        let userLocationData = { country: '', countryCode: '', flag: '' };
+        let itemLocationData = { address: '', latitude: null, longitude: null };
         let map = null;
         let marker = null;
-        let userLocationData = {
-            country: '',
-            countryCode: '',
-            flag: ''
-        };
-        let itemLocationData = {
-            address: '',
-            latitude: null,
-            longitude: null
-        };
 
-        const countryFlags = {
-            'US': '🇺🇸', 'GB': '🇬🇧', 'BR': '🇧🇷', 'DE': '🇩🇪', 'DK': '🇩🇰',
-            'JP': '🇯🇵', 'CN': '🇨🇳', 'ES': '🇪🇸', 'FR': '🇫🇷', 'ZA': '🇿🇦',
-            'AE': '🇦🇪', 'AU': '🇦🇺', 'CA': '🇨🇦', 'IN': '🇮🇳', 'IT': '🇮🇹'
-        };
+        // Load and display posted ads on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadPostedAds();
+        });
 
-        // Detect poster location
+        // LOAD POSTED ADS FROM LOCALSTORAGE
+        function loadPostedAds() {
+            const adsContainer = document.getElementById('adsContainer');
+            const ads = JSON.parse(localStorage.getItem('tangleMeAds') || '[]');
+            
+            if (ads.length === 0) {
+                adsContainer.innerHTML = `
+                    <div class="no-ads-message">
+                        <div class="no-ads-icon">📭</div>
+                        <div class="no-ads-text">No ads yet</div>
+                        <div class="no-ads-subtext">Be the first to post a free ad!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date (newest first)
+            ads.sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate));
+
+            adsContainer.innerHTML = ads.map(ad => `
+                <div class="ad-card">
+                    <div class="ad-header">
+                        <div class="ad-keywords">${ad.keywords || 'Untitled Ad'}</div>
+                        <div class="ad-date">${formatDate(ad.postedDate)}</div>
+                    </div>
+                    
+                    ${ad.description ? `<div class="ad-description">${ad.description}</div>` : ''}
+                    
+                    <div class="ad-locations">
+                        <div class="ad-location-item">
+                            <span class="ad-location-label">📍 Posted from:</span>
+                            <span class="ad-location-value">${ad.postedFrom.flag} ${ad.postedFrom.country}</span>
+                        </div>
+                        <div class="ad-location-item">
+                            <span class="ad-location-label">📍 Item location:</span>
+                            <span class="ad-location-value">${ad.itemLocation.address}</span>
+                        </div>
+                    </div>
+                    
+                    ${ad.contact ? `
+                        <div class="ad-contact">
+                            <span class="ad-contact-label">📧 Contact:</span>
+                            <span class="ad-contact-value">${ad.contact}</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            console.log(`Loaded ${ads.length} ads from localStorage`);
+        }
+
+        // FORMAT DATE FOR DISPLAY
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
         function detectPosterLocation() {
+            console.log('Detecting poster location...');
+            
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
+                    position => {
+                        console.log('Got position:', position.coords);
+                        const { latitude, longitude } = position.coords;
                         
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
                             .then(response => response.json())
                             .then(data => {
-                                const countryCode = data.address.country_code.toUpperCase();
+                                console.log('Geocoding result:', data);
                                 const country = data.address.country;
-                                const flag = countryFlags[countryCode] || '🌍';
+                                const countryCode = data.address.country_code?.toUpperCase() || 'ZA';
+                                const flag = getCountryFlag(countryCode);
                                 
                                 userLocationData = { country, countryCode, flag };
                                 document.getElementById('postedFromLocation').textContent = `${flag} ${country}`;
+                                console.log('Posted from location set:', userLocationData);
                             })
-                            .catch(() => {
-                                document.getElementById('postedFromLocation').textContent = '🌍 Location not shared';
+                            .catch(error => {
+                                console.error('Geocoding error:', error);
+                                document.getElementById('postedFromLocation').textContent = '🔵 Location not shared';
                             });
                     },
-                    () => {
-                        document.getElementById('postedFromLocation').textContent = '🌍 Location not shared';
+                    error => {
+                        console.error('Geolocation error:', error);
+                        document.getElementById('postedFromLocation').textContent = '🔵 Location not shared';
                     }
                 );
             }
         }
 
-        // Use current location
+        function getCountryFlag(countryCode) {
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        }
+
         function useCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
+                    position => {
+                        const { latitude, longitude } = position.coords;
                         
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
                             .then(response => response.json())
                             .then(data => {
-                                const city = data.address.city || data.address.town || data.address.village || '';
+                                const city = data.address.city || data.address.town || '';
                                 const country = data.address.country;
                                 const address = city ? `${city}, ${country}` : country;
                                 
-                                itemLocationData = {
-                                    address: address,
-                                    latitude: lat,
-                                    longitude: lon
-                                };
-                                
+                                itemLocationData = { address, latitude, longitude };
                                 showSelectedLocation(address);
                             });
                     },
-                    () => {
-                        alert('Please enable location permissions');
+                    error => {
+                        alert('Unable to get your location. Please use "Drop Pin on Map" instead.');
                     }
                 );
             }
         }
 
-        // Open map picker
         function openMapPicker() {
             document.getElementById('mapModal').classList.add('show');
+            
             if (!map) {
                 setTimeout(() => {
-                    map = L.map('mapContainer').setView([51.505, -0.09], 10);
+                    map = L.map('map').setView([51.505, -0.09], 13);
+                    
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '© OpenStreetMap'
+                        attribution: '© OpenStreetMap contributors',
+                        maxZoom: 19
                     }).addTo(map);
                     
                     map.on('click', function(e) {
                         if (marker) {
                             map.removeLayer(marker);
                         }
-                        marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
                         
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+                        marker = L.marker(e.latlng).addTo(map);
+                        
+                        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&format=json`)
                             .then(response => response.json())
                             .then(data => {
-                                const city = data.address.city || data.address.town || data.address.village || '';
+                                const city = data.address.city || data.address.town || '';
                                 const country = data.address.country;
                                 const address = city ? `${city}, ${country}` : country;
                                 
                                 document.getElementById('mapSelectedAddress').textContent = address;
                                 document.getElementById('mapConfirmBtn').disabled = false;
                                 
-                                itemLocationData = {
-                                    address: address,
-                                    latitude: e.latlng.lat,
-                                    longitude: e.latlng.lng
-                                };
+                                itemLocationData = { address, latitude: e.latlng.lat, longitude: e.latlng.lng };
                             });
                     });
                 }, 100);
             }
         }
 
-        // Close map picker
         function closeMapPicker() {
             document.getElementById('mapModal').classList.remove('show');
         }
 
-        // Confirm map location
         function confirmMapLocation() {
             showSelectedLocation(itemLocationData.address);
             closeMapPicker();
         }
 
-        // Show selected location
         function showSelectedLocation(address) {
             document.getElementById('selectedLocationText').textContent = address;
             document.getElementById('selectedLocationDisplay').style.display = 'block';
             document.getElementById('btnSubmit').disabled = false;
         }
 
-        // Clear item location
         function clearItemLocation() {
             document.getElementById('selectedLocationDisplay').style.display = 'none';
             document.getElementById('btnSubmit').disabled = true;
             itemLocationData = { address: '', latitude: null, longitude: null };
         }
 
-        // Character counter
         function updateCharCounter(inputId, counterId, maxLength) {
             const input = document.getElementById(inputId);
             const counter = document.getElementById(counterId);
-            const length = input.value.length;
-            counter.textContent = `${length}/${maxLength}`;
-            counter.classList.toggle('warning', length >= maxLength * 0.9);
+            counter.textContent = `${input.value.length}/${maxLength}`;
         }
 
-        // Preview ad
         function previewAd() {
-            const keywords = document.getElementById('adKeywords').value;
-            const description = document.getElementById('adDescription').value;
-            const contact = document.getElementById('adContact').value;
-            
             if (!itemLocationData.address) {
                 alert('Please set item location first!');
                 return;
             }
             
             const preview = `
-═══════════════════════
 📢 AD PREVIEW
-═══════════════════════
+══════════════════════
 
-Keywords: ${keywords || 'None'}
+Keywords: ${document.getElementById('adKeywords').value || 'None'}
 
-${description || 'No description'}
+${document.getElementById('adDescription').value || 'No description'}
 
 📍 Posted from: ${userLocationData.flag} ${userLocationData.country}
 📍 Item location: ${itemLocationData.address}
-📧 Contact: ${contact || 'Not provided'}
+📧 Contact: ${document.getElementById('adContact').value || 'Not provided'}
 
-═══════════════════════
+══════════════════════
             `;
             alert(preview);
         }
 
-        // Submit form
         function handlePostSubmit(event) {
             event.preventDefault();
-            document.getElementById('postForm').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
             
-            console.log('Ad submitted:', {
+            // Create ad object
+            const adData = {
+                id: Date.now().toString(),
                 keywords: document.getElementById('adKeywords').value,
                 description: document.getElementById('adDescription').value,
                 contact: document.getElementById('adContact').value,
                 postedFrom: userLocationData,
-                itemLocation: itemLocationData
-            });
+                itemLocation: itemLocationData,
+                postedDate: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            const existingAds = JSON.parse(localStorage.getItem('tangleMeAds') || '[]');
+            existingAds.push(adData);
+            localStorage.setItem('tangleMeAds', JSON.stringify(existingAds));
+
+            console.log('Ad saved to localStorage:', adData);
+
+            // Close post modal
+            closePostModal();
+
+            // Show success modal
+            document.getElementById('successModal').classList.add('show');
+
+            // Reload ads to display the new one
+            loadPostedAds();
         }
 
-        // Modal functions
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('show');
+        }
+
         function openPostModal() {
+            console.log('Opening Post modal');
             document.getElementById('postModal').classList.add('show');
             detectPosterLocation();
         }
@@ -1345,49 +1108,20 @@ ${description || 'No description'}
         function closePostModal() {
             document.getElementById('postModal').classList.remove('show');
             document.getElementById('postForm').reset();
-            document.getElementById('postForm').style.display = 'flex';
-            document.getElementById('successMessage').style.display = 'none';
             clearItemLocation();
+            document.getElementById('keywordsCounter').textContent = '0/50';
+            document.getElementById('descCounter').textContent = '0/300';
         }
 
-        function openListingsModal() {
-            document.getElementById('listingsModal').classList.add('show');
-        }
-
-        function openAboutModal() {
-            document.getElementById('aboutModal').classList.add('show');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('show');
-        }
-
-        function toggleMenu() {
-            document.getElementById('hamburger').classList.toggle('active');
-            document.getElementById('mobileMenu').classList.toggle('open');
-            document.getElementById('menuOverlay').classList.toggle('show');
-        }
-
-        function closeMenu() {
-            document.getElementById('hamburger').classList.remove('active');
-            document.getElementById('mobileMenu').classList.remove('open');
-            document.getElementById('menuOverlay').classList.remove('show');
-        }
-
-        function changeLanguage() {
-            // Language switching logic here
-        }
-
-        // Close modal on overlay click
         document.getElementById('postModal').addEventListener('click', function(e) {
             if (e.target === this) closePostModal();
         });
-        document.getElementById('listingsModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal('listingsModal');
+
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSuccessModal();
         });
-        document.getElementById('aboutModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal('aboutModal');
-        });
+
+        console.log('=== ALL FUNCTIONS LOADED ===');
     </script>
 </body>
 </html>
